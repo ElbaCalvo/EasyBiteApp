@@ -1,0 +1,497 @@
+openapi: '3.0.0'
+info: # General information about the API
+  version: 1.1.0
+  title: EasyBiteAPI
+  description: Esta API controla tanto los usuarios de EasyBite como las recetas.
+servers: # Servers where the API is hosted
+  - url: http://localhost:8000
+tags: # Tags to group different types of actions
+  - name: User
+    description: User actions
+  - name: Recipes
+    description: Recipes info/actions
+paths: # API paths along with their operations
+  /user/session: # POST request to create a new session
+    post: # POST request to log in a user
+      tags:
+        - User
+      summary: Logs user into the system
+      operationId: loginUser
+      requestBody: # Request body for the operation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+      security:
+        - bearerAuth: []
+      responses: # Responses for the request
+        201:
+          $ref: '#/components/responses/SuccessfulLogin'
+        400:
+          $ref: '#/components/responses/ClientError'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+  /user: # User operations
+    post: # POST request to register a new user
+      tags:
+        - User
+      summary: Registers a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+      responses:
+        201:
+          $ref: '#/components/responses/SuccessfulOperation' 
+        400:
+          $ref: '#/components/responses/ClientError'
+        409:
+          $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/ServerError'
+    get: # GET request to get user profile
+      tags:
+        - User
+      summary: Get user profile
+      parameters: # Parameters for the request
+        - name: SessionToken 
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security: 
+        - bearerAuth: [] 
+      responses:
+        200:
+          description: User profile received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+    put: # PUT request to update user profile
+      tags:
+        - User
+      summary: Update user profile
+      parameters:
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileBody'
+      responses: # Responses for the request
+        200:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        409:
+          $ref: '#/components/responses/Conflict'
+        500:
+          $ref: '#/components/responses/ServerError'
+    delete: # DELETE request to delete user account
+      tags:
+        - User
+      summary: Delete user account
+      parameters:
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessfulOperation'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+  /user/favorites: # User favorites recipes operations
+    get:  # GET request to get user's favorite recipes
+      tags:
+        - User
+      summary: Retrieves all user's favorite recipes
+      parameters:
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User favorites received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/UserFavorites'
+                # If there are no favorites, return an empty array.
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+    post: # POST request to add a recipe to user's favorites
+      tags:
+        - User
+      summary: Adds a recipe to the user's favorites list
+      parameters:
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+  /user/favorites/{recipeID}: # User favorites recipes operations
+    delete: # DELETE request to delete a recipe from user's favorites
+      tags:
+        - User
+      summary: Deletes a recipe from the user's favorites list
+      parameters:
+        - name: recipeID
+          in: path
+          required: true
+          description: ID of the recipe to delete from favorites
+          schema:
+            type: string
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+  /user/mealplan/{day}: # User weekly meal plan operations
+    get: # GET request to get user's meal plan for a specific day
+      tags:
+        - User
+      summary: Retrieves all recipes from the user's weekly meal plan for a specific day
+      parameters:
+        - name: day
+          in: path
+          required: true
+          description: Day of the meal plan to retrieve
+          schema:
+            type: string
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User meal plan for the day received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/UserMealPlan'
+                # If there are no recipes, return an empty array.
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+    post: # POST request to add a recipe to user's meal plan for a specific day
+      tags:
+        - User
+      summary: Adds a recipe to the user's meal plan for a specific day
+      parameters:
+        - name: day
+          in: path
+          required: true
+          description: Day of the meal plan to add a recipe to
+          schema:
+            type: string
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        201:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+    delete: # DELETE request to delete a recipe from user's meal plan for a specific day
+      tags:
+        - User
+      summary: Deletes a recipe from the user's meal plan for a specific day
+      parameters:
+        - name: day
+          in: path
+          required: true
+          description: Day of the meal plan to delete a recipe from
+          schema:
+            type: string
+        - name: SessionToken
+          schema:
+            type: string
+          in: header
+          required: true
+          description: The sessionToken returned by the login request
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+  /recipes: # Recipes operations
+    get: # GET request to get all recipes
+      tags:
+        - Recipes
+      summary: Retrieves all recipes
+      responses:
+        200:
+          description: Recipes received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/Recipes'
+        500:
+          $ref: '#/components/responses/ServerError'
+    post: # POST request to create a new recipe
+      tags:
+        - Recipes
+      summary: Creates a new recipe
+      responses:
+        201:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          $ref: '#/components/responses/ServerError'
+components: # Components used in the API
+  responses: # Responses for the API
+    ClientError:
+      description: The request could not be completed due to a client-side error.
+      content:
+        application/json:    
+          schema:
+            example:
+              response: not_ok
+    ServerError:
+      description: An error occurred on the server while processing the request.
+      content:
+        application/json:    
+          schema:
+            example:
+              response: not_ok
+    BadRequest:
+      description: The request could not be completed.
+      content:
+        application/json:    
+          schema:
+            example:
+              response: not_ok
+    Unauthorized:
+      description: User is not authorized to perform the operation.
+      content:
+        application/json:    
+          schema:
+            example:
+              response: unauthorized
+    Conflict:
+      description: Conflict on the server.
+      content:
+        application/json:
+          schema:
+            example:
+              response: already_exists
+    SuccessfulOperation:
+      description: The operation was successful.
+      content:
+        application/json:
+          schema:
+            example:
+              response: ok
+    SuccessfulLogin:
+      description: User has successfully logged in.
+      content:
+        application/json:
+          schema:
+            example:
+              response: ok
+              sessionToken: asdjbfsduifhsdf
+  schemas:  # Schemas for the API
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email
+          example: "janedoe@gmail.com"
+        password:
+          type: string
+          description: The user's password
+    UpdateProfileBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email
+          example: "janedoe@gmail.com"
+        username:
+          type: string
+          description: The user's username
+          example: "JaneDoe"
+        password:
+          type: string
+          description: The user's password
+        birthdate:
+          type: string
+          format: date
+          description: The user's birthdate
+          example: "11/06/2003"
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email
+          example: "janedoe@gmail.com"
+        username:
+          type: string
+          description: The user's username
+          example: "JaneDoe"
+        password:
+          type: string
+          description: The user's password
+        birthdate:
+          type: string
+          format: date
+          description: The user's birthdate
+          example: "11/06/2003"
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          description: The user's email
+          example: "janedoe@gmail.com"
+        username:
+          type: string
+          description: The user's username
+          example: "JaneDoe"
+        password:
+          type: string
+          description: The user's password
+        birthdate:
+          type: string
+          format: date
+          description: The user's birthdate
+          example: "11/06/2003"
+    Recipes:
+      type: object
+      properties:
+        image_url:
+          type: string
+          description: The URL of the image of the recipe
+          example: "https://www.example.com/image.jpg"
+        name:
+          type: string
+          description: The name of the recipe
+          example: Spagueti Boloñesa
+        recipe: 
+          type: string
+          description: The recipe itself
+          example: "Boil the pasta, cook the meat. Mix them together."
+        ingredients: 
+          type: object
+          items:
+            type: array
+          $ref: '#/components/schemas/RecipeIngredients'
+    Ingredient:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the ingredient
+          example: Pasta
+        kcal:
+          type: number
+          description: The calories of the ingredient
+          example: 100
+    RecipeIngredients:
+      type: object
+      properties:
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ingredient'
+          description: Array of the ingredients for the recipe
+    UserFavorites:
+      type: object
+      properties:
+        favorites:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipes'
+          description: Array of the user's favorite recipes
+    UserMealPlan:
+      type: object
+      properties:
+        mealplan:
+          type: array
+          items:
+            $ref: '#/components/schemas/Recipes'
+          description: Array of the user's weekly meal plan
+  securitySchemes:  # Security schemes for the API
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
