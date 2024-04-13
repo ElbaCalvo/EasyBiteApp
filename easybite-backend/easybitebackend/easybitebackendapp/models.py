@@ -19,6 +19,19 @@ class User(models.Model):
             "mealplan": self.mealplan
         }
 
+class Ingredients(models.Model):
+    name = models.CharField(max_length=30)
+    kcal = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "kcal": self.kcal
+        }
+        
 class Recipes(models.Model):
     image_link = models.CharField(max_length=200)
     name = models.CharField(max_length=30)
@@ -34,19 +47,6 @@ class Recipes(models.Model):
             "name": self.name,
             "recipe": self.recipe,
             "ingredients": self.ingredients
-        }
-
-class Ingredients(models.Model):
-    name = models.CharField(max_length=30)
-    kcal = models.IntegerField()
-
-    def __str__(self):
-        return self.name
-
-    def to_json(self):
-        return {
-            "name": self.name,
-            "kcal": self.kcal
         }
         
 class UserSession(models.Model):
