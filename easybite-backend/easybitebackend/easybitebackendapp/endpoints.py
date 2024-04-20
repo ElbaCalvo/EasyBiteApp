@@ -119,11 +119,14 @@ def user(request):
         if not (check_email_format(email) and check_password_format(password)):
             return JsonResponse({"response": "not_ok"}, status=400)
         try:
-            User.objects.get(email=client_email)
-            if user.email != client_email:
+            User.objects.get(email=email)
+            if user.email != email:
                 return JsonResponse({"response": "already_exist"}, status=409)
         except:
             pass
+        if client_password is not None:
+            if not check_password_format(password):
+                return JsonResponse({"response": "not_ok"}, status=400)
 
         salted_and_hashed_pass = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
         user = User.objects.get(id=user_session.user.id)
