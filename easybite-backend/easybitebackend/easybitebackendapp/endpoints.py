@@ -82,6 +82,7 @@ def user(request):
         session.save()
 
         return JsonResponse({"response": "ok", "SessionToken": random_token}, status=201)
+
     elif request.method == 'GET':
         try:
             user_session = authenticate_user(request)
