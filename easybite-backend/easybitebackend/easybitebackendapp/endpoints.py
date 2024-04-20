@@ -19,6 +19,16 @@ def authenticate_user(request):
         raise PermissionDenied('Unauthorized')
     return user_session
 
+def check_email_format(email):
+    if email is None or '@' not in email or len(email) < 8:
+        return False
+    return True
+
+def check_password_format(password):
+    if len(password) < 6:
+        return False
+    return True
+
 @csrf_exempt
 def sessions(request):
     if request.method == 'POST':
@@ -82,6 +92,7 @@ def user(request):
         session.save()
 
         return JsonResponse({"response": "ok", "SessionToken": random_token}, status=201)
+    
     elif request.method == 'GET':
         try:
             user_session = authenticate_user(request)
@@ -91,3 +102,35 @@ def user(request):
             return JsonResponse(json_response, safe=False, status=200)
         except PermissionDenied:
             return JsonResponse({'error': 'unauthorized'}, status=401)
+    
+    elif request.method == 'PUT':
+        try:
+            user_session = authenticate_user(request)
+        except PermissionDenied:
+            return JsonResponse({'error': 'unauthorized'}, status=401)
+        try:
+            body_json = json.loads(request.body)
+            email = body_json.get('email', None)
+            username = body_json.get('username', None)
+            password = body_json.get('password', None)
+            birthdate = body_json.get('birthdate', None)
+        except KeyError:
+            return JsonResponse({"response": "not_ok"}, status=400)
+        if not (check_email_format(email) and check_password_format(password)):
+            return JsonResponse({"response": "not_ok"}, status=400)
+        try:
+            User.objects.get(email=client_email)
+            if user.email != client_email:
+                return JsonResponse({"response": "already_exist"}, status=409)
+        except:
+            pass
+
+        salted_and_hashed_pass = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
+        user = User.objects.get(id=user_session.user.id)
+        user.email = email
+        user.username = username
+        user.password = salted_and_hashed_pass
+        user.birthdate = birthdate
+        user.save()
+        return JsonResponse({"response": "ok"}, status=200)
+
