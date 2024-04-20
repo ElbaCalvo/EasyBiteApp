@@ -12,10 +12,8 @@ from django.contrib.auth.hashers import check_password
 
 def authenticate_user(request):
     session_token = request.headers.get('SessionToken', None)
-    # Extract the token from the request headers
     if session_token is None:
         raise PermissionDenied('Unauthorized')
-    # Authenticate user based on the provided token
     try:
         user_session = UserSession.objects.get(token=session_token)
     except UserSession.DoesNotExist:
@@ -34,9 +32,8 @@ def sessions(request):
         try:
             db_user = User.objects.get(email=json_email)
         except User.DoesNotExist:
-            return JsonResponse({"response": "User not in database"}, status=404)  # No existe el usuario
-        if check_password(json_password, db_user.password):
-        ##if bcrypt.checkpw(json_password.encode('utf8'), db_user.password.encode('utf8')):
+            return JsonResponse({"response": "User not in database"}, status=404)
+        if bcrypt.checkpw(json_password.encode('utf8'), db_user.password.encode('utf8')):
             if 'SessionToken' in request.headers and request.headers['SessionToken'] is not None:
                 try:
                     user_session = authenticate_user(request)
