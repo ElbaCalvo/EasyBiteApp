@@ -51,26 +51,8 @@ class Ingredients(models.Model):
         
 class UserSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.session
-
-    def to_json(self):
-        return {
-            "user": self.user,
-            "session": self.session
-        }
+    token = models.CharField(unique=True, max_length=45)
 
 class UserFavorites(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.user
-
-    def to_json(self):
-        return {
-            "user": self.user,
-            "recipe": self.recipe
-        }
