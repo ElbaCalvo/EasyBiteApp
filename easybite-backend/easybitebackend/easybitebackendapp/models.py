@@ -69,4 +69,3 @@ class UserMealPlan(models.Model):
     ]
     # El campo 'week_day' permite que el usuario seleccione el día de la semana al que añadirá la receta.
     week_day = models.CharField(choices=WEEKDAYS, null=False, blank=False, max_length=3)
-

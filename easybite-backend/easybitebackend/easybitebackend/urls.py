@@ -21,4 +21,5 @@ from easybitebackendapp import endpoints
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user', endpoints.user),
+    path('user/sessions', endpoints.sessions),
 ]
