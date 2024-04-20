@@ -82,3 +82,12 @@ def user(request):
         session.save()
 
         return JsonResponse({"response": "ok", "SessionToken": random_token}, status=201)
+    elif request.method == 'GET':
+        try:
+            user_session = authenticate_user(request)
+            user_id = user_session.user.id
+            full_user = User.objects.get(id=user_id)
+            json_response = full_user.to_json()
+            return JsonResponse(json_response, safe=False, status=200)
+        except PermissionDenied:
+            return JsonResponse({'error': 'unauthorized'}, status=401)
