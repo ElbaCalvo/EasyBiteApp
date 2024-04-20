@@ -28,7 +28,7 @@ def user(request):
             return JsonResponse({"response": "not_ok", "message": "Formato de correo electrónico inválido"}, status=400)
         try:
             User.objects.get(email=client_email)
-            return JsonResponse({"response": "Dirección de email ya registrada"}, status=409)
+            return JsonResponse({"response": "already_exists"}, status=409)
         except:
             pass
 
