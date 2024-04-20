@@ -19,6 +19,19 @@ class User(models.Model):
             "mealplan": self.mealplan
         }
 
+class Ingredients(models.Model):
+    name = models.CharField(max_length=30)
+    kcal = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "kcal": self.kcal
+        }
+        
 class Recipes(models.Model):
     image_link = models.CharField(max_length=200)
     name = models.CharField(max_length=30)
@@ -35,32 +48,10 @@ class Recipes(models.Model):
             "recipe": self.recipe,
             "ingredients": self.ingredients
         }
-
-class Ingredients(models.Model):
-    name = models.CharField(max_length=30)
-    kcal = models.IntegerField()
-
-    def __str__(self):
-        return self.name
-
-    def to_json(self):
-        return {
-            "name": self.name,
-            "kcal": self.kcal
-        }
         
 class UserSession(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    session = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.session
-
-    def to_json(self):
-        return {
-            "user": self.user,
-            "session": self.session
-        }
+    token = models.CharField(unique=True, max_length=45)
 
 class UserFavorites(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
