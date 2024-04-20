@@ -12,7 +12,7 @@ class User(models.Model):
     def to_json(self):
         return {
             "email": self.email,
-            "name": self.name,
+            "username": self.username,
             "password": self.password,
             "birthdate": self.birthdate,
         }
