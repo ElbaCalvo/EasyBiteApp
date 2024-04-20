@@ -39,14 +39,14 @@ def sessions(request):
                     user_session = authenticate_user(request)
                     return JsonResponse({"response": "ok", "SessionToken": user_session.token}, status=200)
                 except PermissionDenied:
-                    return JsonResponse({"response": "Unauthorized"}, status=401)
+                    return JsonResponse({"response": "unauthorized"}, status=401)
             else:
                 random_token = secrets.token_hex(10)
                 session = UserSession(user=db_user, token=random_token)
-                ession.save()
+                session.save()
             return JsonResponse({"response": "ok", "SessionToken": random_token}, status=201)
         else:
             # No coinciden
-            return JsonResponse({"response": "Unauthorized"}, status=401)
+            return JsonResponse({"response": "unauthorized"}, status=401)
     else:
         return JsonResponse({"response": "HTTP method unsupported"}, status=405)
