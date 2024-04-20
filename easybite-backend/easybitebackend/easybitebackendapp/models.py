@@ -17,6 +17,19 @@ class User(models.Model):
             "birthdate": self.birthdate,
         }
 
+class Ingredients(models.Model):
+    name = models.CharField(max_length=35, null=True, blank=True)
+    kcal = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    def to_json(self):
+        return {
+            "name": self.name,
+            "kcal": self.kcal
+        }
+
 class Recipes(models.Model):
     image_link = models.CharField(max_length=400, null=False, blank=False)
     name = models.CharField(max_length=50, null=False, blank=False)
@@ -32,19 +45,6 @@ def to_json(self):
             "name": self.name,
             "recipe": self.recipe,
             "ingredients": ingredients_info # Se usa la lista de nombres y kcal en lugar de los objetos Ingredient
-        }
-
-class Ingredients(models.Model):
-    name = models.CharField(max_length=35, null=True, blank=True)
-    kcal = models.IntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-    def to_json(self):
-        return {
-            "name": self.name,
-            "kcal": self.kcal
         }
         
 class UserSession(models.Model):
