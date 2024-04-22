@@ -80,17 +80,18 @@ def user(request):
             client_password = client_json['password']
             client_birthdate = client_json['birthdate']
         except KeyError:
-            return JsonResponse({"response": "not_ok"}, status=400)
+            return JsonResponse({"response": "invalid_request_format"}, status=400)
 
         if not client_username or not client_email or not client_password or not client_birthdate:
-                return JsonResponse({"response": "not_ok", "message": "Campos incompletos"}, status=400)
+                return JsonResponse({"response": "missing_required_fields"}, status=400)
         
-        if client_email is None or '@' not in client_email or len(client_email) < 8:
-            return JsonResponse({"response": "not_ok", "message": "Formato de correo electrónico inválido"}, status=400)
+        if not (check_email_format(client_email) and check_password_format(client_password) and check_birthdate_format(client_birthdate)):
+            return JsonResponse({"response": "invalid_email_password_or_birthdate_format"}, status=400)
         try:
-            User.objects.get(email=client_email)
-            return JsonResponse({"response": "already_exists"}, status=409)
-        except:
+            existing_user = User.objects.get(email=client_email)
+            if existing_user.email == client_email:
+                return JsonResponse({"response": "email_already_exist"}, status=409)
+        except User.DoesNotExist:
             pass
 
         salted_and_hashed_pass = bcrypt.hashpw(client_password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
@@ -148,10 +149,14 @@ def user(request):
 
     elif request.method == 'DELETE':
         try:
+            try:
+                user_session = authenticate_user(request)
+            except PermissionDenied:
+                return JsonResponse({'response': 'unauthorized'}, status=401)
             user = User.objects.get(id=user_session.user.id)
             user.delete()
-            return JsonResponse({'response': 'ok'}, status=200)
+            return JsonResponse({'response': 'user_deleted_successfully'}, status=200)
         except User.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'user_not_found'}, status=404)
     else:
-        return JsonResponse({"response": "Method Not Allowed"}, status=405)
+        return JsonResponse({"response": "method_not_allowed"}, status=405)
