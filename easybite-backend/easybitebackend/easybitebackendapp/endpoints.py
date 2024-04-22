@@ -19,6 +19,26 @@ def authenticate_user(request):
         raise PermissionDenied('Unauthorized')
     return user_session
 
+def check_email_format(email):
+    if email is None or '@' not in email or len(email) < 8:
+        return False
+    return True
+
+def check_password_format(password):
+    if len(password) < 6:
+        return False
+    return True
+
+def check_birthdate_format(birthdate):
+    try:
+        birthdate_dt = datetime.datetime.strptime(birthdate, '%Y-%m-%d')
+        current_year = datetime.datetime.now().year
+        if birthdate_dt.year == current_year:
+            return False
+    except ValueError:
+        return False
+    return True
+
 @csrf_exempt
 def sessions(request):
     if request.method == 'POST':
@@ -92,12 +112,41 @@ def user(request):
             return JsonResponse(json_response, safe=False, status=200)
         except PermissionDenied:
             return JsonResponse({'error': 'unauthorized'}, status=401)
-
-    elif request.method == 'DELETE':
+    
+    elif request.method == 'PUT':
         try:
             user_session = authenticate_user(request)
         except PermissionDenied:
             return JsonResponse({'error': 'unauthorized'}, status=401)
+        try:
+            body_json = json.loads(request.body)
+            email = body_json.get('email', None)
+            username = body_json.get('username', None)
+            password = body_json.get('password', None)
+            birthdate = body_json.get('birthdate', None)
+            if not (email and username and password and birthdate):
+                return JsonResponse({"response": "missing_required_fields"}, status=400)
+        except KeyError:
+            return JsonResponse({"response": "invalid_request_format"}, status=400)
+        if not (check_email_format(email) and check_password_format(password) and check_birthdate_format(birthdate)):
+            return JsonResponse({"response": "invalid_email_password_or_birthdate_format"}, status=400)
+        try:
+            existing_user = User.objects.get(email=email)
+            if existing_user.email == email:
+                return JsonResponse({"response": "email_already_exist"}, status=409)
+        except User.DoesNotExist:
+            pass
+
+        salted_and_hashed_pass = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
+        user = User.objects.get(id=user_session.user.id)
+        user.email = email
+        user.username = username
+        user.password = salted_and_hashed_pass
+        user.birthdate = birthdate
+        user.save()
+        return JsonResponse({"response": "user_updated_successfully"}, status=200)
+
+    elif request.method == 'DELETE':
         try:
             user = User.objects.get(id=user_session.user.id)
             user.delete()
