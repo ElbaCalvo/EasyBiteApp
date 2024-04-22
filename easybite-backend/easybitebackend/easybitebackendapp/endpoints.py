@@ -29,6 +29,16 @@ def check_password_format(password):
         return False
     return True
 
+def check_birthdate_format(birthdate):
+    try:
+        birthdate_dt = datetime.datetime.strptime(birthdate, '%Y-%m-%d')
+        current_year = datetime.datetime.now().year
+        if birthdate_dt.year == current_year:
+            return False
+    except ValueError:
+        return False
+    return True
+
 @csrf_exempt
 def sessions(request):
     if request.method == 'POST':
@@ -114,19 +124,18 @@ def user(request):
             username = body_json.get('username', None)
             password = body_json.get('password', None)
             birthdate = body_json.get('birthdate', None)
+            if not (email and username and password and birthdate):
+                return JsonResponse({"response": "missing_required_fields"}, status=400)
         except KeyError:
-            return JsonResponse({"response": "not_ok"}, status=400)
-        if not (check_email_format(email) and check_password_format(password)):
-            return JsonResponse({"response": "not_ok"}, status=400)
+            return JsonResponse({"response": "invalid_request_format"}, status=400)
+        if not (check_email_format(email) and check_password_format(password) and check_birthdate_format(birthdate)):
+            return JsonResponse({"response": "invalid_email_password_or_birthdate_format"}, status=400)
         try:
-            User.objects.get(email=email)
-            if user.email != email:
-                return JsonResponse({"response": "already_exist"}, status=409)
-        except:
+            existing_user = User.objects.get(email=email)
+            if existing_user.email == email:
+                return JsonResponse({"response": "email_already_exist"}, status=409)
+        except User.DoesNotExist:
             pass
-        if client_password is not None:
-            if not check_password_format(password):
-                return JsonResponse({"response": "not_ok"}, status=400)
 
         salted_and_hashed_pass = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt()).decode('utf8')
         user = User.objects.get(id=user_session.user.id)
@@ -135,5 +144,5 @@ def user(request):
         user.password = salted_and_hashed_pass
         user.birthdate = birthdate
         user.save()
-        return JsonResponse({"response": "ok"}, status=200)
+        return JsonResponse({"response": "user_updated_successfully"}, status=200)
 
