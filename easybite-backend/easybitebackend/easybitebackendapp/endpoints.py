@@ -80,17 +80,17 @@ def user(request):
             client_password = client_json['password']
             client_birthdate = client_json['birthdate']
         except KeyError:
-            return JsonResponse({"response": "invalid_request_format"}, status=400)
+            return JsonResponse({"response": "not_ok"}, status=400)
 
         if not client_username or not client_email or not client_password or not client_birthdate:
-                return JsonResponse({"response": "missing_required_fields"}, status=400)
+                return JsonResponse({"response": "not_ok"}, status=400)
         
         if not (check_email_format(client_email) and check_password_format(client_password) and check_birthdate_format(client_birthdate)):
-            return JsonResponse({"response": "invalid_email_password_or_birthdate_format"}, status=400)
+            return JsonResponse({"response": "not_ok"}, status=400)
         try:
             existing_user = User.objects.get(email=client_email)
             if existing_user.email == client_email:
-                return JsonResponse({"response": "email_already_exist"}, status=409)
+                return JsonResponse({"response": "already_exist"}, status=409)
         except User.DoesNotExist:
             pass
 
@@ -126,15 +126,15 @@ def user(request):
             password = body_json.get('password', None)
             birthdate = body_json.get('birthdate', None)
             if not (email and username and password and birthdate):
-                return JsonResponse({"response": "missing_required_fields"}, status=400)
+                return JsonResponse({"response": "not_ok"}, status=400)
         except KeyError:
-            return JsonResponse({"response": "invalid_request_format"}, status=400)
+            return JsonResponse({"response": "not_ok"}, status=400)
         if not (check_email_format(email) and check_password_format(password) and check_birthdate_format(birthdate)):
-            return JsonResponse({"response": "invalid_email_password_or_birthdate_format"}, status=400)
+            return JsonResponse({"response": "not_ok"}, status=400)
         try:
             existing_user = User.objects.get(email=email)
             if existing_user.email == email:
-                return JsonResponse({"response": "email_already_exist"}, status=409)
+                return JsonResponse({"response": "already_exist"}, status=409)
         except User.DoesNotExist:
             pass
 
@@ -145,7 +145,7 @@ def user(request):
         user.password = salted_and_hashed_pass
         user.birthdate = birthdate
         user.save()
-        return JsonResponse({"response": "user_updated_successfully"}, status=200)
+        return JsonResponse({"response": "ok"}, status=200)
 
     elif request.method == 'DELETE':
         try:
@@ -155,7 +155,7 @@ def user(request):
                 return JsonResponse({'response': 'unauthorized'}, status=401)
             user = User.objects.get(id=user_session.user.id)
             user.delete()
-            return JsonResponse({'response': 'user_deleted_successfully'}, status=200)
+            return JsonResponse({'response': 'ok'}, status=200)
         except User.DoesNotExist:
             return JsonResponse({'response': 'user_not_found'}, status=404)
     else:
