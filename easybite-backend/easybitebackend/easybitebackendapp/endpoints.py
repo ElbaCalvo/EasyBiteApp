@@ -161,6 +161,7 @@ def user(request):
     else:
         return JsonResponse({"response": "method_not_allowed"}, status=405)
 
+@csrf_exempt
 def user_favorites(request):
     if request.method == 'GET':
         try:
@@ -173,5 +174,20 @@ def user_favorites(request):
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
             return JsonResponse({'response': 'user_not_found'}, status=404)
+
+    elif request.method == 'POST':
+        try:
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            data = json.loads(request.body)
+            recipe = Recipes.objects.get(id=data['recipe_id'])
+            new_favorite = UserFavorites.objects.create(user=user, recipe=recipe)
+            return JsonResponse({'response': 'ok'}, status=201)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except User.DoesNotExist:
+            return JsonResponse({'response': 'user_not_found'}, status=404)
+        except Recipes.DoesNotExist:
+            return JsonResponse({'response': 'recipe_not_found'}, status=404)
     else:
         return JsonResponse({"response": "method_not_allowed"}, status=405)
