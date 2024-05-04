@@ -191,3 +191,18 @@ def user_favorites(request):
             return JsonResponse({'response': 'recipe_not_found'}, status=404)
     else:
         return JsonResponse({"response": "method_not_allowed"}, status=405)
+
+
+@csrf_exempt
+def delete_user_favorite(request, recipe_id):
+    if request.method == 'DELETE':
+        try:
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            favorite = UserFavorites.objects.get(user=user, recipe_id=recipe_id)
+            favorite.delete()
+            return JsonResponse({'response': 'ok'}, status=200)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except UserFavorites.DoesNotExist:
+            return JsonResponse({'response': 'not_found'}, status=404)
