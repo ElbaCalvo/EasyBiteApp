@@ -69,3 +69,11 @@ class UserMealPlan(models.Model):
     ]
     # El campo 'week_day' permite que el usuario seleccione el día de la semana al que añadirá la receta.
     week_day = models.CharField(choices=WEEKDAYS, null=False, blank=False, max_length=3)
+
+    def to_json(self):
+        return {
+            'image_link': self.recipe.image_link,
+            'name': self.recipe.name,
+            'recipe': self.recipe.recipe,
+            'ingredients': [{'name': ingredient.name, 'kcal': ingredient.kcal} for ingredient in self.recipe.ingredients.all()]
+        }
