@@ -161,16 +161,14 @@ def user(request):
     else:
         return JsonResponse({"response": "method_not_allowed"}, status=405)
 
-def user_favorites(request, user_id):
+def user_favorites(request):
     if request.method == 'GET':
         try:
             user_session = authenticate_user(request)
             user = User.objects.get(id=user_session.user.id)
-            if user.id != int(user_id):
-                return JsonResponse({'response': 'unauthorized'}, status=401)
-            favorites = Favorites.objects.filter(user=user)
-            favorites_list = [favorite.to_dict() for favorite in favorites]
-            return JsonResponse({'response': 'ok', 'favorites': favorites_list}, status=200)
+            favorites = UserFavorites.objects.filter(user=user)
+            favorites_json = [favorite.recipe.to_json() for favorite in favorites]
+            return JsonResponse({'favorites': favorites_json}, status=200)
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
