@@ -36,7 +36,7 @@ class Recipes(models.Model):
     recipe = models.CharField(max_length=300, null=False, blank=False)
     ingredients = models.ManyToManyField(Ingredients) # Una receta puede tener múltiples ingredientes y un ingrediente puede estar presente en múltiples recetas.
 
-def to_json(self):
+    def to_json(self):
         # Se obtiene una lista de los nombres y kcal de los ingredientes
         ingredients_info = [{"name": ingredient.name, "kcal": ingredient.kcal} for ingredient in self.ingredients.all()]
 
