@@ -219,7 +219,7 @@ def user_mealplan(request, day):
             valid_days = [choice[0] for choice in UserMealPlan.WEEKDAYS]
             if day not in valid_days:
                 return JsonResponse({'response': 'not_ok'}, status=400)
-            UserMealPlan.objects.create(user=user, recipe=recipe, week_day=day)
+            new_mealplan = UserMealPlan.objects.create(user=user, recipe=recipe, week_day=day)
             return JsonResponse({'response': 'ok'}, status=201)
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
