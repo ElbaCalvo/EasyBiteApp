@@ -209,6 +209,24 @@ def delete_user_favorite(request, recipe_id):
 
 @csrf_exempt
 def user_mealplan(request, day):
+    if request.method == 'POST':
+        try:
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            data = json.loads(request.body)
+            recipe_id = data.get('recipe_id') 
+            recipe = Recipes.objects.get(id=recipe_id)
+            valid_days = [choice[0] for choice in UserMealPlan.WEEKDAYS]
+            if day not in valid_days:
+                return JsonResponse({'response': 'not_ok'}, status=400)
+            new_mealplan = UserMealPlan.objects.create(user=user, recipe=recipe, week_day=day)
+            return JsonResponse({'response': 'ok'}, status=201)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except User.DoesNotExist:
+            return JsonResponse({'response': 'not_found'}, status=404)
+        except Recipes.DoesNotExist:
+
     if request.method == 'GET':
         try:
             user_session = authenticate_user(request)
