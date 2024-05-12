@@ -219,6 +219,13 @@ def user_mealplan(request, day):
             valid_days = [choice[0] for choice in UserMealPlan.WEEKDAYS]
             if day not in valid_days:
                 return JsonResponse({'response': 'not_ok'}, status=400)
+
+            user_mealplans = UserMealPlan.objects.filter(user=user, week_day=day)
+
+            for mealplan in user_mealplans:
+                if mealplan.recipe.id == recipe_id:
+                    return JsonResponse({'response': 'not_ok'}, status=400)
+
             new_mealplan = UserMealPlan.objects.create(user=user, recipe=recipe, week_day=day)
             return JsonResponse({'response': 'ok'}, status=201)
         except PermissionDenied:
