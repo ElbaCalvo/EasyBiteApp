@@ -34,7 +34,7 @@ class Recipes(models.Model):
     image_link = models.CharField(max_length=400, null=False, blank=False)
     name = models.CharField(max_length=50, null=False, blank=False)
     recipe = models.CharField(max_length=300, null=False, blank=False)  
-    food_type = models.CharField(max_length=50)
+    food_type = models.CharField(max_length=50, null=False, blank=False)
     ingredients = models.ManyToManyField(Ingredients) # Una receta puede tener múltiples ingredientes y un ingrediente puede estar presente en múltiples recetas.
 
     def to_json(self):
