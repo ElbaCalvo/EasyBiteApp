@@ -292,3 +292,13 @@ def recipes(request):
         return JsonResponse(response_data)
     else:
         return JsonResponse({"response": "not_ok"}, status=405)
+
+def recipe_detail(request, recipe_id):
+    if request.method == 'GET':
+        try:
+            recipe = Recipes.objects.get(id=recipe_id)
+            return JsonResponse(recipe.to_json(), status=200)
+        except Recipes.DoesNotExist:
+            return JsonResponse({'response': 'not_found'}, status=404)
+    else:
+        return JsonResponse({'response': 'not_ok'}, status=405)
