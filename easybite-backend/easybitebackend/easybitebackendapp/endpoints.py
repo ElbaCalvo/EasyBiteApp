@@ -7,7 +7,7 @@ from django.db.models import F, ExpressionWrapper, FloatField
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-from .models import User, UserSession, Ingredients, Recipes, UserFavorites
+from .models import User, UserSession, Ingredients, Recipes, UserFavorites, UserMealPlan
 
 def authenticate_user(request):
     session_token = request.headers.get('SessionToken', None)
@@ -205,4 +205,23 @@ def delete_user_favorite(request, recipe_id):
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except UserFavorites.DoesNotExist:
+            return JsonResponse({'response': 'not_found'}, status=404)
+
+@csrf_exempt
+def user_mealplan(request, day):
+    if request.method == 'GET':
+        try:
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            meal_plans = UserMealPlan.objects.filter(user=user, week_day=day)
+            meal_plans_data = {}
+            for meal_plan in meal_plans:
+                day_name = dict(UserMealPlan.WEEKDAYS)[meal_plan.week_day]
+                if day_name not in meal_plans_data:
+                    meal_plans_data[day_name] = []
+                meal_plans_data[day_name].append(meal_plan.to_json())
+            return JsonResponse({'meal_plans': meal_plans_data}, status=200)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except User.DoesNotExist:
             return JsonResponse({'response': 'not_found'}, status=404)
