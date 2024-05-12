@@ -25,4 +25,5 @@ urlpatterns = [
     path('user', endpoints.user),
     path('user/favorites', endpoints.user_favorites),
     path('user/favorites/<int:recipe_id>', endpoints.delete_user_favorite),
+    path('user/mealplan/<day>', endpoints.user_mealplan),
 ]
