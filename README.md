@@ -3,7 +3,7 @@
 ![EasyBite-Github](https://raw.githubusercontent.com/ElbaCalvo/EasyBiteApp/main/doc/logo/EasyBite_GitHub.png?token=GHSAT0AAAAAACQC663Z6B7IEECEX323JLM2ZRTLHHQ)
 
 <p align="center">
-  <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-b08968">
+  <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-087830">
   <img src="https://img.shields.io/badge/Python-EA4C89?style=for-the-badge&logo=python&logoColor=white&color=8B5839&style=plastic">
   <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white&color=8B5839&style=plastic">
   <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white&color=8B5839&style=plastic">
