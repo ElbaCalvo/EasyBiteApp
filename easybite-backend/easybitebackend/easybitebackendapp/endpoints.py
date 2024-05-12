@@ -209,23 +209,6 @@ def delete_user_favorite(request, recipe_id):
 
 @csrf_exempt
 def user_mealplan(request, day):
-    if request.method == 'GET':
-        try:
-            user_session = authenticate_user(request)
-            user = User.objects.get(id=user_session.user.id)
-            meal_plans = UserMealPlan.objects.filter(user=user, week_day=day)
-            meal_plans_data = {}
-            for meal_plan in meal_plans:
-                day_name = dict(UserMealPlan.WEEKDAYS)[meal_plan.week_day]
-                if day_name not in meal_plans_data:
-                    meal_plans_data[day_name] = []
-                meal_plans_data[day_name].append(meal_plan.to_json())
-            return JsonResponse({'meal_plans': meal_plans_data}, status=200)
-        except PermissionDenied:
-            return JsonResponse({'response': 'unauthorized'}, status=401)
-        except User.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
-
     if request.method == 'POST':
         try:
             user_session = authenticate_user(request)
@@ -243,4 +226,21 @@ def user_mealplan(request, day):
         except User.DoesNotExist:
             return JsonResponse({'response': 'not_found'}, status=404)
         except Recipes.DoesNotExist:
+            return JsonResponse({'response': 'not_found'}, status=404)
+
+    if request.method == 'GET':
+        try:
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            meal_plans = UserMealPlan.objects.filter(user=user, week_day=day)
+            meal_plans_data = {}
+            for meal_plan in meal_plans:
+                day_name = dict(UserMealPlan.WEEKDAYS)[meal_plan.week_day]
+                if day_name not in meal_plans_data:
+                    meal_plans_data[day_name] = []
+                meal_plans_data[day_name].append(meal_plan.to_json())
+            return JsonResponse({'meal_plans': meal_plans_data}, status=200)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except User.DoesNotExist:
             return JsonResponse({'response': 'not_found'}, status=404)
