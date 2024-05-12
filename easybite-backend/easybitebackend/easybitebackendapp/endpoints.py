@@ -244,3 +244,23 @@ def user_mealplan(request, day):
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
             return JsonResponse({'response': 'not_found'}, status=404)
+    
+    if request.method == 'DELETE':
+        try:
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            data = json.loads(request.body)
+            recipe_id = data.get('recipe_id')
+            if recipe_id is None:
+                return JsonResponse({'response': 'not_ok'}, status=400)
+            mealplan = UserMealPlan.objects.get(user=user, recipe_id=recipe_id)
+            mealplan.delete()
+            return JsonResponse({'response': 'ok'}, status=200)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except UserMealPlan.DoesNotExist:
+            return JsonResponse({'response': 'not_found'}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({'response': 'not_ok'}, status=400)
+    else:
+        return JsonResponse({'response': 'not_ok'}, status=405)
