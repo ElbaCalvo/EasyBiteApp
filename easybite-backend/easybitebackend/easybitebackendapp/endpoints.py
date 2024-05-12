@@ -271,3 +271,24 @@ def user_mealplan(request, day):
             return JsonResponse({'response': 'not_ok'}, status=400)
     else:
         return JsonResponse({'response': 'not_ok'}, status=405)
+
+@csrf_exempt
+def recipes(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        image_link = data.get('image_link')
+        name = data.get('name')
+        recipe = data.get('recipe')
+        ingredients_str = data.get('ingredients')
+
+        ingredient_names = [ingredient.strip() for ingredient in ingredients_str.split(',')]
+
+        ingredients = Ingredients.objects.filter(name__in=ingredient_names)
+
+        new_recipe = Recipes.objects.create(image_link=image_link, name=name, recipe=recipe)
+        new_recipe.ingredients.set(ingredients)
+        response_data = new_recipe.to_json()
+        return JsonResponse(response_data)
+    else:
+        return JsonResponse({"response": "not_ok"}, status=405)
