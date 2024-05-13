@@ -290,6 +290,45 @@ paths: # API paths along with their operations
           $ref: '#/components/responses/Unauthorized'
         500:
           $ref: '#/components/responses/ServerError'
+  /recipes/{recipeID}: # Recipes operations
+    get: # GET request to one recipes
+      tags:
+        - Recipes
+      summary: Retrieves recipe by ID
+      parameters:
+        - name: recipeID
+          in: path
+          required: true
+          description: ID of the recipe to retrieve.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Recipes received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/Recipes'
+        500:
+          $ref: '#/components/responses/ServerError'
+    delete: # DELETE request to delete a recipe
+      tags:
+        - Recipes
+      summary: Deletes a recipe by ID
+      parameters:
+        - name: recipeID
+          in: path
+          required: true
+          description: ID of the recipe.
+          schema:
+            type: string
+      responses:
+        201:
+          $ref: '#/components/responses/SuccessfulOperation'
+        400:
+          $ref: '#/components/responses/ClientError'
+        500:
+          $ref: '#/components/responses/ServerError'
   /recipes: # Recipes operations
     get: # GET request to get all recipes
       tags:
@@ -308,6 +347,11 @@ paths: # API paths along with their operations
       tags:
         - Recipes
       summary: Creates a new recipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRecipes'
       responses:
         201:
           $ref: '#/components/responses/SuccessfulOperation'
@@ -450,6 +494,30 @@ components: # Components used in the API
           type: string
           description: The recipe itself
           example: "Boil the pasta, cook the meat. Mix them together."
+        ingredients: 
+          type: object
+          items:
+            type: array
+          $ref: '#/components/schemas/RecipeIngredients'
+    PostRecipes:
+      type: object
+      properties:
+        image_url:
+          type: string
+          description: The URL of the image of the recipe
+          example: "https://www.example.com/image.jpg"
+        name:
+          type: string
+          description: The name of the recipe
+          example: Spagueti Boloñesa
+        recipe: 
+          type: string
+          description: The recipe itself
+          example: "Boil the pasta, cook the meat. Mix them together."
+        food_type: 
+          type: string
+          description: The type of food
+          example: "Dinner"
         ingredients: 
           type: object
           items:

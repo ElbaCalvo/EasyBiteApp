@@ -12,11 +12,11 @@ from .models import User, UserSession, Ingredients, Recipes, UserFavorites, User
 def authenticate_user(request): # Autenticar al usuario
     session_token = request.headers.get('SessionToken', None)
     if session_token is None:
-        raise PermissionDenied('Unauthorized')
+        raise PermissionDenied({"response": "unauthorized"}, status=401)
     try:
         user_session = UserSession.objects.get(token=session_token)
     except UserSession.DoesNotExist:
-        raise PermissionDenied('Unauthorized')
+        raise PermissionDenied({"response": "unauthorized"}, status=401)
     return user_session
 
 #Funciones de validación de formatos
@@ -52,7 +52,7 @@ def sessions(request): # Manejo de sesiones
         try: # Se verifica si el usuario existe en la base de datos
             db_user = User.objects.get(email=json_email)
         except User.DoesNotExist:
-            return JsonResponse({"response": "User not in database"}, status=404)
+            return JsonResponse({"response": "not_ok"}, status=404)
         # Se verifica si las contraseñas coinciden y se maneja la sesión
         if bcrypt.checkpw(json_password.encode('utf8'), db_user.password.encode('utf8')):
             if 'SessionToken' in request.headers and request.headers['SessionToken'] is not None:
@@ -70,7 +70,7 @@ def sessions(request): # Manejo de sesiones
             # Las contraseñas no coinciden
             return JsonResponse({"response": "unauthorized"}, status=401)
     else:
-        return JsonResponse({"response": "HTTP method unsupported"}, status=405)
+        return JsonResponse({"response": "http_method_unsupported"}, status=405)
 
 @csrf_exempt
 def user(request): # Manejo de usuarios
@@ -165,9 +165,9 @@ def user(request): # Manejo de usuarios
             user.delete() # Se elimina el usuario
             return JsonResponse({'response': 'ok'}, status=200)
         except User.DoesNotExist:
-            return JsonResponse({'response': 'user_not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
     else:
-        return JsonResponse({"response": "method_not_allowed"}, status=405)
+        return JsonResponse({"response": "not_ok"}, status=405)
 
 @csrf_exempt
 def user_favorites(request): # Manejo de los favoritos del usuario
@@ -181,7 +181,7 @@ def user_favorites(request): # Manejo de los favoritos del usuario
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
-            return JsonResponse({'response': 'user_not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
 
     elif request.method == 'POST':
         try: # Se crea un nuevo favorito para el usuario
@@ -191,18 +191,18 @@ def user_favorites(request): # Manejo de los favoritos del usuario
             recipe_id = data['recipe_id']
             # Se verifica si el usuario ya tiene la receta como favorita
             if UserFavorites.objects.filter(user=user, recipe_id=recipe_id).exists():
-                return JsonResponse({'response': 'recipe_already_favorite'}, status=400)
+                return JsonResponse({'response': 'already_exists'}, status=400)
             recipe = Recipes.objects.get(id=data['recipe_id'])
             new_favorite = UserFavorites.objects.create(user=user, recipe=recipe)
             return JsonResponse({'response': 'ok'}, status=201)
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
-            return JsonResponse({'response': 'user_not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
         except Recipes.DoesNotExist:
-            return JsonResponse({'response': 'recipe_not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
     else:
-        return JsonResponse({"response": "method_not_allowed"}, status=405)
+        return JsonResponse({"response": "not_ok"}, status=405)
 
 
 @csrf_exempt
@@ -217,7 +217,9 @@ def delete_user_favorite(request, recipe_id):
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except UserFavorites.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
+    else:
+        return JsonResponse({"response": "not_ok"}, status=405)
 
 @csrf_exempt
 def user_mealplan(request, day):
@@ -244,9 +246,9 @@ def user_mealplan(request, day):
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
         except Recipes.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
 
     if request.method == 'GET':
         try:  # Se intenta obtener los planes de comida para el día especificado
@@ -264,7 +266,7 @@ def user_mealplan(request, day):
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
     
     if request.method == 'DELETE':
         try: # Se intenta eliminar un plan de comida para el día especificado
@@ -280,11 +282,11 @@ def user_mealplan(request, day):
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except UserMealPlan.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
         except json.JSONDecodeError:
             return JsonResponse({'response': 'not_ok'}, status=400)
     else:
-        return JsonResponse({'response': 'not_ok'}, status=405)
+        return JsonResponse({"response": "not_ok"}, status=405)
 
 @csrf_exempt
 def recipes(request):
@@ -335,7 +337,7 @@ def recipe_detail(request, recipe_id):
             recipe = Recipes.objects.get(id=recipe_id) # Se obtiene la receta por su ID
             return JsonResponse(recipe.to_json(), status=200)
         except Recipes.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
     
     elif request.method == 'DELETE':
         try:
@@ -343,7 +345,7 @@ def recipe_detail(request, recipe_id):
             recipe.delete() # Se elimina la receta
             return JsonResponse({'response': 'ok'}, status=204)
         except Recipes.DoesNotExist:
-            return JsonResponse({'response': 'not_found'}, status=404)
+            return JsonResponse({'response': 'not_ok'}, status=404)
 
     else:
         return JsonResponse({'response': 'not_ok'}, status=405)
