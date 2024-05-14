@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ImageView.Rounded" parent="">
+        <corners name="cornerSizeTopLeft">25dp</corners>
+        <corners name="cornerSizeTopRight">25dp</corners>
+    </style>
+</resources>
