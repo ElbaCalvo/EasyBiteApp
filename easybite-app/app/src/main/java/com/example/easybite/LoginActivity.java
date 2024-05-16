@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userEmail;
     private EditText userPassword;
     private Button accessButton;
-    private TextView mainRedirect;
+    private TextView registerRedirect;
     private Context context = this;
     private RequestQueue requestQueue;
     private ProgressBar pb1;
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.email);
         userPassword = findViewById(R.id.passwd);
         accessButton = findViewById(R.id.access);
-        mainRedirect = findViewById(R.id.register_redirect);
+        registerRedirect = findViewById(R.id.register_redirect);
         pb1 = findViewById(R.id.loadingScreen);
         requestQueue = Volley.newRequestQueue(this);
 
@@ -55,10 +55,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        mainRedirect.setOnClickListener(new View.OnClickListener() {
+        registerRedirect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MainActivity.class);
+                Intent intent = new Intent(context, RegisterActivity.class);
                 startActivity(intent);
             }
         });
