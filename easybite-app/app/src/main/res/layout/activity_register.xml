@@ -198,13 +198,12 @@
                 android:layout_height="48dp"
                 android:layout_marginTop="15dp"
                 android:hint="11-03-2006"
-                android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/birthdate_label" />
 
             <Button
-                android:id="@+id/access"
+                android:id="@+id/register_button"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_marginTop="15dp"
