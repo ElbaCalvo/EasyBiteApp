@@ -7,13 +7,163 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!-- Search Bar -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/search_view_style"
+        android:queryHint="Busca por ingredientes"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Section Title -->
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Qué buscas?"
+        android:textStyle="bold"
+        android:textSize="21sp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/search_view"
+        app:layout_constraintStart_toStartOf="@id/search_view" />
+
+    <!-- Buttons Section -->
+    <LinearLayout
+        android:id="@+id/buttons_section"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/text1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center_horizontal">
+
+        <!-- Button 1: Desayunos -->
+        <LinearLayout
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            android:gravity="center">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_view_desayunos"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:src="@drawable/desayunos"
+                android:background="@drawable/food_type_img_border"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ImageView.RoundedCorners" />
+
+            <TextView
+                android:id="@+id/text_desayunos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Desayunos"
+                android:textColor="#ba9369"
+                android:textStyle="bold"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- Button 2: Comidas -->
+        <LinearLayout
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            android:gravity="center">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_view_comidas"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:src="@drawable/comidas"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ImageView.RoundedCorners" />
+
+            <TextView
+                android:id="@+id/text_comidas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comidas"
+                android:layout_marginTop="5dp"
+
+                android:textColor="#ba9369"
+                android:textStyle="bold"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- Button 3: Snacks -->
+        <LinearLayout
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            android:gravity="center">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_view_snacks"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:src="@drawable/snacks"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ImageView.RoundedCorners" />
+
+            <TextView
+                android:id="@+id/text_snacks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Snacks"
+                android:textColor="#ba9369"
+                android:textStyle="bold"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <!-- Button 4: Postres -->
+        <LinearLayout
+            android:layout_width="85dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp"
+            android:gravity="center">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_view_postres"
+                android:layout_width="match_parent"
+                android:layout_height="130dp"
+                android:src="@drawable/postres"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ImageView.RoundedCorners" />
+
+            <TextView
+                android:id="@+id/text_postres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Postres"
+                android:layout_marginTop="5dp"
+
+                android:textColor="#ba9369"
+                android:textStyle="bold"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Popular Recipes Title -->
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recetas populares"
+        android:textStyle="bold"
+        android:textSize="21sp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@id/buttons_section"
+        app:layout_constraintStart_toStartOf="@id/text1" />
 </androidx.constraintlayout.widget.ConstraintLayout>

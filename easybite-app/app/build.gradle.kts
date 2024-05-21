@@ -30,6 +30,7 @@ android {
 
 dependencies {
     implementation("com.android.volley:volley:1.2.1")
+    implementation("com.google.android.material:material:1.3.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.4.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.4.0")
     implementation(libs.appcompat)
