@@ -42,6 +42,7 @@ class Recipes(models.Model):
         ingredients_info = [{"name": ingredient.name, "kcal": ingredient.kcal} for ingredient in self.ingredients.all()]
 
         return {
+            "id": self.id,
             "image_link": self.image_link,
             "name": self.name,
             "recipe": self.recipe,
