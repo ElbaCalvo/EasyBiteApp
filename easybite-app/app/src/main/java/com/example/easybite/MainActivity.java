@@ -1,6 +1,7 @@
 package com.example.easybite;
 
 import android.os.Bundle;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
