@@ -44,7 +44,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesViewHolder> {
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, DetailActivity.class);
-                System.out.print(dataForThisCell.getRecipeId());
                 intent.putExtra("recipe_id", dataForThisCell.getRecipeId());
                 context.startActivity(intent);
             }

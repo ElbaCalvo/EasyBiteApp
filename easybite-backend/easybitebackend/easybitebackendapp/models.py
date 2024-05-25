@@ -46,6 +46,7 @@ class Recipes(models.Model):
             "image_link": self.image_link,
             "name": self.name,
             "recipe": self.recipe,
+            "food_type": self.food_type,
             "ingredients": ingredients_info # Se usa la lista de nombres y kcal en lugar de los objetos Ingredient
         }
         
