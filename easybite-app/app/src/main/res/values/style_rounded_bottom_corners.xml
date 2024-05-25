@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ImageView.RoundedBottomCorners" parent="">
+        <item name="cornerSizeBottomLeft">9%</item>
+        <item name="cornerSizeBottomRight">9%</item>
+    </style>
+</resources>

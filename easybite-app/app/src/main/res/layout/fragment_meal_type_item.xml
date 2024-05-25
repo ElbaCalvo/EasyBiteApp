@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/meal_type_recycler_view_item"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recycler_view"
+        android:layout_width="373dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/rounded_corners_reciclerview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image_view"
+            android:layout_width="342dp"
+            android:layout_height="160dp"
+            android:background="@drawable/rounded_corners_login"
+            android:src="@drawable/crema_verduras"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="13.5dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.238"
+            app:shapeAppearanceOverlay="@style/ImageView.RoundedCorners"/>
+
+        <TextView
+            android:id="@+id/recipe_name"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:text="Nombre receta"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="23dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/image_view"
+            app:layout_constraintTop_toBottomOf="@+id/image_view" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="325dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="10dp"
+            android:text="Recetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetarecetareceta"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:maxLines="4"
+            android:ellipsize="end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/recipe_name"
+            app:layout_constraintTop_toBottomOf="@+id/recipe_name" />
+
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/empty_add"
+            android:layout_marginEnd="5dp"
+            app:tint="#696969"
+            app:layout_constraintEnd_toStartOf="@id/heart"
+            app:layout_constraintTop_toTopOf="@id/recipe_name" />
+
+        <ImageView
+            android:id="@+id/heart"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/empty_heart"
+            android:scaleType="centerInside"
+            app:tint="#696969"
+            app:layout_constraintEnd_toEndOf="@id/image_view"
+            app:layout_constraintTop_toTopOf="@id/add"
+            android:layout_marginEnd="5dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

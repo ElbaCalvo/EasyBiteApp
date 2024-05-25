@@ -93,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
-                        System.out.print("aaaaaaaa");
                         Toast.makeText(context, "Token: " + receivedToken, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, MainActivity.class);
                         startActivity(intent);
