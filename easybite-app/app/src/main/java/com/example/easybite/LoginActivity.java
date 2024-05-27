@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(context, MainActivity.class);
                         startActivity(intent);
 
-                        SharedPreferences preferences = context.getSharedPreferences("AIRPEEK_APP_PREFS", MODE_PRIVATE);
+                        SharedPreferences preferences = context.getSharedPreferences("EASYBITE_APP_PREFS", MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putString("VALID_EMAIL", email);
                         editor.putString("VALID_TOKEN", receivedToken);
