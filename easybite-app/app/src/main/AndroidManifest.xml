@@ -44,5 +44,10 @@
             android:name=".MealTypeActivity"
             android:exported="true">
         </activity>
+
+        <activity
+            android:name=".EditProfileActivity"
+            android:exported="true">
+        </activity>
     </application>
 </manifest>

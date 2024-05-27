@@ -15,7 +15,7 @@
             android:background="@android:color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_profile"
+            app:layout_constraintTop_toBottomOf="@id/close_button"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="15dp"/>
 
@@ -82,6 +82,31 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/birthdate_label"
             android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="#cfd5db"
+            android:text="Cerrar sesión"
+            android:textColor="#280A2F"
+            android:textSize="16dp"
+            android:layout_marginStart="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_profile" />
+
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:backgroundTint="#cfd5db"
+            android:text="Eliminar cuenta"
+            android:textSize="16dp"
+            android:textColor="#F10000"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@id/close_button"
+            app:layout_constraintTop_toTopOf="@+id/close_button" />
 
         <TextView
             android:id="@+id/favorites_label"
