@@ -27,7 +27,7 @@ public class JsonObjectRequestWithAuthentication extends JsonObjectRequest {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        SharedPreferences preferences = context.getSharedPreferences("JPARTY_APP_PREFS", Context.MODE_PRIVATE);
+        SharedPreferences preferences = context.getSharedPreferences("EASYBITE_APP_PREFS", Context.MODE_PRIVATE);
         String sessionToken = preferences.getString("VALID_TOKEN", null);
         if (sessionToken == null) {
             throw new AuthFailureError();
