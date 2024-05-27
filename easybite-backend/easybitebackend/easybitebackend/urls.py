@@ -20,7 +20,6 @@ from easybitebackendapp import endpoints
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user', endpoints.user),
     path('user/sessions', endpoints.sessions),
     path('user', endpoints.user),
     path('user/favorites', endpoints.user_favorites),

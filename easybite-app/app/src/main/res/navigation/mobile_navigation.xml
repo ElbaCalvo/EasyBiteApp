@@ -7,7 +7,7 @@
 
         <fragment
             android:id="@+id/navigation_profile"
-            android:name="com.example.easybite.PrincipalFragment"
+            android:name="com.example.easybite.ProfileFragment"
             android:label="EasyBite"
             tools:layout="@layout/fragment_principal" />
 
