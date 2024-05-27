@@ -6,6 +6,10 @@ android {
     namespace = "com.example.easybite"
     compileSdk = 34
 
+    viewBinding {
+        enable = true
+    }
+
     defaultConfig {
         applicationId = "com.example.easybite"
         minSdk = 24
