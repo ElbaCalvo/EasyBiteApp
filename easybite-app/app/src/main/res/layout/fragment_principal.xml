@@ -24,12 +24,17 @@
                 android:padding="16dp">
 
                 <!-- Search Bar -->
-                <androidx.appcompat.widget.SearchView
+                <AutoCompleteTextView
                     android:id="@+id/search_view"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_margin="16dp"
                     android:background="@drawable/search_view_style"
+                    android:drawableLeft="@drawable/search"
+                    android:drawableStart="@drawable/search"
+                    android:drawableTint="#696969"
+                    android:paddingLeft="10dp"
+                    android:drawablePadding="10dp"
                     android:queryHint="Busca por ingredientes"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
