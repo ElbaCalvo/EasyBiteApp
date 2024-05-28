@@ -27,4 +27,6 @@ urlpatterns = [
     path('user/mealplan/<day>', endpoints.user_mealplan),
     path('recipes', endpoints.recipes),
     path('recipes/<int:recipe_id>', endpoints.recipe_detail),
+    path('ingredients', endpoints.ingredients),
+    path('recipes/ingredient/<str:ingredient>', endpoints.recipes_by_ingredient),
 ]
