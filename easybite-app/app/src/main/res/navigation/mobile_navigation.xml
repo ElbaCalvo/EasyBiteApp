@@ -19,7 +19,7 @@
 
         <fragment
             android:id="@+id/navigation_calendar"
-            android:name="com.example.easybite.PrincipalFragment"
+            android:name="com.example.easybite.WeekDaysFragment"
             android:label="EasyBite"
-            tools:layout="@layout/fragment_principal" />
+            tools:layout="@layout/fragment_week_days" />
     </navigation>
