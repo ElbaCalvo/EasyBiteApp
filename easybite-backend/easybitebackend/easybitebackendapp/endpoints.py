@@ -349,3 +349,20 @@ def recipe_detail(request, recipe_id):
 
     else:
         return JsonResponse({'response': 'not_ok'}, status=405)
+    
+
+def ingredients(request):
+    if request.method == 'GET':
+        ingredients = Ingredients.objects.all().values('name')
+        ingredients_list = list(ingredients)
+        return JsonResponse(ingredients_list, safe=False)
+    else:
+        return JsonResponse({'response': 'not_ok'}, status=405)
+
+def recipes_by_ingredient(request, ingredient):
+    if request.method == 'GET':
+        recipes_queryset = Recipes.objects.filter(ingredients__name=ingredient)
+        recipes_data = [recipe.to_json() for recipe in recipes_queryset]
+        return JsonResponse(recipes_data, safe=False)
+    else:
+        return JsonResponse({"response": "not_ok"}, status=405)
