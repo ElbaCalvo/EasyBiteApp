@@ -204,7 +204,6 @@ def user_favorites(request): # Manejo de los favoritos del usuario
     else:
         return JsonResponse({"response": "not_ok"}, status=405)
 
-
 @csrf_exempt
 def delete_user_favorite(request, recipe_id):
     if request.method == 'DELETE':
@@ -222,34 +221,7 @@ def delete_user_favorite(request, recipe_id):
         return JsonResponse({"response": "not_ok"}, status=405)
 
 @csrf_exempt
-def user_mealplan(request, day):
-    if request.method == 'POST':
-        try:  # Se intenta agregar un plan de comida para el día especificado
-            user_session = authenticate_user(request)
-            user = User.objects.get(id=user_session.user.id)
-            data = json.loads(request.body)
-            recipe_id = data.get('recipe_id') 
-            recipe = Recipes.objects.get(id=recipe_id)
-            valid_days = [choice[0] for choice in UserMealPlan.WEEKDAYS]
-            if day not in valid_days:
-                return JsonResponse({'response': 'not_ok'}, status=400)
-
-            user_mealplans = UserMealPlan.objects.filter(user=user, week_day=day)
-
-            for mealplan in user_mealplans: # Se recorre cada plan de comida del usuario para el día especificado
-                if mealplan.recipe.id == recipe_id: # Se verifica si el plan de comida ya contiene la receta especificada
-                    return JsonResponse({'response': 'not_ok'}, status=400)
-
-            # Se crea un nuevo plan de comida
-            new_mealplan = UserMealPlan.objects.create(user=user, recipe=recipe, week_day=day)
-            return JsonResponse({'response': 'ok'}, status=201)
-        except PermissionDenied:
-            return JsonResponse({'response': 'unauthorized'}, status=401)
-        except User.DoesNotExist:
-            return JsonResponse({'response': 'not_ok'}, status=404)
-        except Recipes.DoesNotExist:
-            return JsonResponse({'response': 'not_ok'}, status=404)
-
+def get_mealplan(request, day):
     if request.method == 'GET':
         try:  # Se intenta obtener los planes de comida para el día especificado
             user_session = authenticate_user(request)
@@ -267,24 +239,44 @@ def user_mealplan(request, day):
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
             return JsonResponse({'response': 'not_ok'}, status=404)
-    
-    if request.method == 'DELETE':
+
+@csrf_exempt
+def user_mealplan(request, day, recipe_id):
+    if request.method == 'POST':
+        try:  # Se intenta agregar un plan de comida para el día especificado
+            user_session = authenticate_user(request)
+            user = User.objects.get(id=user_session.user.id)
+            recipe = Recipes.objects.get(id=recipe_id)
+            valid_days = [choice[0] for choice in UserMealPlan.WEEKDAYS]
+            if day not in valid_days:
+                return JsonResponse({'response': 'not_ok'}, status=400)
+
+            user_mealplans = UserMealPlan.objects.filter(user=user, week_day=day, recipe_id=recipe_id)
+
+            if user_mealplans.exists(): # Se verifica si el plan de comida ya contiene la receta especificada
+                return JsonResponse({'response': 'not_ok'}, status=400)
+
+            # Se crea un nuevo plan de comida
+            new_mealplan = UserMealPlan.objects.create(user=user, recipe=recipe, week_day=day)
+            return JsonResponse({'response': 'ok'}, status=201)
+        except PermissionDenied:
+            return JsonResponse({'response': 'unauthorized'}, status=401)
+        except User.DoesNotExist:
+            return JsonResponse({'response': 'not_ok'}, status=404)
+        except Recipes.DoesNotExist:
+            return JsonResponse({'response': 'not_ok'}, status=404)
+
+    elif request.method == 'DELETE':
         try: # Se intenta eliminar un plan de comida para el día especificado
             user_session = authenticate_user(request)
             user = User.objects.get(id=user_session.user.id)
-            data = json.loads(request.body)
-            recipe_id = data.get('recipe_id')
-            if recipe_id is None:
-                return JsonResponse({'response': 'not_ok'}, status=400)
-            mealplan = UserMealPlan.objects.get(user=user, recipe_id=recipe_id)
+            mealplan = UserMealPlan.objects.get(user=user, recipe_id=recipe_id, week_day=day)
             mealplan.delete() # Se elimina el plan de comida
             return JsonResponse({'response': 'ok'}, status=200)
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except UserMealPlan.DoesNotExist:
             return JsonResponse({'response': 'not_ok'}, status=404)
-        except json.JSONDecodeError:
-            return JsonResponse({'response': 'not_ok'}, status=400)
     else:
         return JsonResponse({"response": "not_ok"}, status=405)
 

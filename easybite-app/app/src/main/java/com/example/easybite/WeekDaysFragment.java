@@ -27,53 +27,52 @@ public class WeekDaysFragment extends Fragment {
         mondayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("MON");
             }
         });
         tuesdayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("TUE");
             }
         });
         wednesdayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("WED");
             }
         });
         thursdayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("THU");
             }
         });
         fridayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("FRI");
             }
         });
         saturdayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("SAT");
             }
         });
         sundayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MealPlanActivity.class);
-                startActivity(intent);
+                startMealPlanActivity("SUN");
             }
         });
 
         return view;
+    }
+
+    private void startMealPlanActivity(String day) {
+        Intent intent = new Intent(getActivity(), MealPlanActivity.class);
+        intent.putExtra("day", day);
+        startActivity(intent);
     }
 }

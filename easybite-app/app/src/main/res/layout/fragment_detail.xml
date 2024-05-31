@@ -29,48 +29,11 @@
             android:text="Crema de verduras"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toStartOf="@id/add"
+            android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/image"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" />
-
-        <ImageView
-            android:id="@+id/heart"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/empty_heart"
-            android:scaleType="centerInside"
-            app:tint="#696969"
-            app:layout_constraintEnd_toEndOf="@id/image"
-            app:layout_constraintTop_toTopOf="@id/recipe_name"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginTop="3dp" />
-
-        <ImageView
-            android:id="@+id/add"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/empty_add"
-            app:layout_constraintEnd_toStartOf="@id/heart"
-            app:layout_constraintTop_toTopOf="@id/recipe_name"
-            app:tint="#696969"
-            tools:layout_editor_absoluteX="326dp"
-            android:layout_marginTop="3dp"/>
-
-        <TextView
-            android:id="@+id/kcal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:background="@drawable/kcal_tag"
-            android:padding="6dp"
-            android:text="200kcal"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/recipe_name"
-            app:layout_constraintStart_toStartOf="@id/recipe_name"/>
 
         <View
             android:id="@+id/separator"
@@ -81,7 +44,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/kcal"
+            app:layout_constraintTop_toBottomOf="@+id/recipe_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -102,6 +65,7 @@
             android:id="@+id/ingredients"
             android:layout_width="377dp"
             android:layout_height="wrap_content"
+            android:textSize="16dp"
             android:text="ingredientesingredientesingredientesingredientesingredientesingredientesingredientesingredientesingredientes"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@id/ingredients_title"
@@ -126,7 +90,8 @@
         <TextView
             android:id="@+id/recipe"
             android:layout_width="375dp"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
+            android:textSize="16dp"
             android:text="recipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipereciperecipe"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@id/recipe_title"

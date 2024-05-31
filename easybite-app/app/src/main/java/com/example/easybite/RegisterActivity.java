@@ -151,7 +151,6 @@ public class RegisterActivity extends AppCompatActivity {
                             int serverCode = error.networkResponse.statusCode;
                             Toast.makeText(context, "Estado de respuesta: " + serverCode, Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }
         );

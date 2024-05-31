@@ -35,7 +35,6 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         recipeName = view.findViewById(R.id.recipe_name);
-        recipeCalories = view.findViewById(R.id.kcal);
         recipeIngredients = view.findViewById(R.id.ingredients);
         recipeExplanation = view.findViewById(R.id.recipe);
         recipeImage = view.findViewById(R.id.image);
