@@ -75,6 +75,8 @@ class UserMealPlan(models.Model):
 
     def to_json(self):
         return {
+            "mealplan_id": self.recipe.id,
+            "id": self.id,
             'image_link': self.recipe.image_link,
             'name': self.recipe.name,
             'recipe': self.recipe.recipe,
