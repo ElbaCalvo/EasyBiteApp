@@ -16,6 +16,7 @@ class RecipesViewHolder extends RecyclerView.ViewHolder {
     private TextView textViewRecipeName;
     private TextView textViewRecipe;
     public ImageView addButton;
+    public ImageView heartButton;
 
     public RecipesViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -23,6 +24,7 @@ class RecipesViewHolder extends RecyclerView.ViewHolder {
         this.textViewRecipeName = itemView.findViewById(R.id.recipe_name);
         this.textViewRecipe = itemView.findViewById(R.id.description);
         this.addButton = itemView.findViewById(R.id.add);
+        this.heartButton = itemView.findViewById(R.id.heart);
     }
 
     public void showData(RecipesData data) {

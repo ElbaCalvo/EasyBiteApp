@@ -35,10 +35,9 @@ class Recipes(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
     recipe = models.CharField(max_length=300, null=False, blank=False)  
     food_type = models.CharField(max_length=50, null=False, blank=False)
-    ingredients = models.ManyToManyField(Ingredients) # Una receta puede tener múltiples ingredientes y un ingrediente puede estar presente en múltiples recetas.
+    ingredients = models.ManyToManyField(Ingredients)
 
     def to_json(self):
-        # Se obtiene una lista de los nombres y kcal de los ingredientes
         ingredients_info = [{"name": ingredient.name, "kcal": ingredient.kcal} for ingredient in self.ingredients.all()]
 
         return {
@@ -47,7 +46,7 @@ class Recipes(models.Model):
             "name": self.name,
             "recipe": self.recipe,
             "food_type": self.food_type,
-            "ingredients": ingredients_info # Se usa la lista de nombres y kcal en lugar de los objetos Ingredient
+            "ingredients": ingredients_info
         }
         
 class UserSession(models.Model):
@@ -61,7 +60,7 @@ class UserFavorites(models.Model):
 class UserMealPlan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
-    WEEKDAYS = [ # Se definen las opciones para los días de la semana.
+    WEEKDAYS = [
         ('MON', 'Lunes'),
         ('TUE', 'Martes'),
         ('WED', 'Miércoles'),
@@ -70,7 +69,6 @@ class UserMealPlan(models.Model):
         ('SAT', 'Sabado'),
         ('SUN', 'Domingo'),
     ]
-    # El campo 'week_day' permite que el usuario seleccione el día de la semana al que añadirá la receta.
     week_day = models.CharField(choices=WEEKDAYS, null=False, blank=False, max_length=3)
 
     def to_json(self):

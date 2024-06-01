@@ -170,16 +170,17 @@ public class ProfileFragment extends Fragment {
     }
 
     private void sentRecipesRequest(){
-        JsonArrayRequest request = new JsonArrayRequest
+        JsonObjectRequestWithAuthentication request = new JsonObjectRequestWithAuthentication
                 (Request.Method.GET,
-                        Server.name + "/recipes",
+                        "/user/favorites",
                         null,
-                        new Response.Listener<JSONArray>(){
+                        new Response.Listener<JSONObject>(){
                             @Override
-                            public void onResponse(JSONArray response) {
-                                for(int i=0; i<response.length(); i++) {
-                                    try {
-                                        JSONObject recipes = response.getJSONObject(i);
+                            public void onResponse(JSONObject response) {
+                                try {
+                                    JSONArray favorites = response.getJSONArray("favorites");
+                                    for(int i=0; i<favorites.length(); i++) {
+                                        JSONObject recipes = favorites.getJSONObject(i);
                                         String image_link = recipes.getString("image_link");
                                         String name = recipes.getString("name");
                                         String recipe = recipes.getString("recipe");
@@ -188,9 +189,10 @@ public class ProfileFragment extends Fragment {
                                         recipes.put("recipe", recipe);
                                         RecipesData data = new RecipesData(recipes);
                                         recipesDataList.add(data);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
+                                    adapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
                                 adapter.notifyDataSetChanged();
                             }
@@ -200,7 +202,8 @@ public class ProfileFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                });
+                },context
+                );
         queue.add(request);
     }
 }

@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         navView.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_SELECTED);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_profile, R.id.navigation_home, R.id.navigation_profile).build();
+                R.id.navigation_profile, R.id.navigation_home, R.id.navigation_calendar,
+                R.id.navigation_detail, R.id.navigation_meal_type, R.id.navigation_search).build();
 
         NavController navController = Navigation.findNavController(this,
                 R.id.nav_host_fragment_activity_main);

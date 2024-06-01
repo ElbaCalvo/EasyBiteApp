@@ -9,7 +9,7 @@
             android:id="@+id/navigation_profile"
             android:name="com.example.easybite.ProfileFragment"
             android:label="EasyBite"
-            tools:layout="@layout/fragment_principal" />
+            tools:layout="@layout/fragment_profile" />
 
         <fragment
             android:id="@+id/navigation_home"
@@ -22,4 +22,19 @@
             android:name="com.example.easybite.WeekDaysFragment"
             android:label="EasyBite"
             tools:layout="@layout/fragment_week_days" />
+
+        <fragment
+            android:id="@+id/navigation_detail"
+            android:name="com.example.easybite.DetailFragment"
+            tools:layout="@layout/fragment_detail" />
+
+        <fragment
+            android:id="@+id/navigation_meal_type"
+            android:name="com.example.easybite.MealTypeFragment"
+            tools:layout="@layout/fragment_meal_type" />
+
+        <fragment
+            android:id="@+id/navigation_search"
+            android:name="com.example.easybite.SearchFragment"
+            tools:layout="@layout/fragment_search" />
     </navigation>

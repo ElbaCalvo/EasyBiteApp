@@ -10,6 +10,8 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getLayoutInflater().inflate(R.layout.activity_detail, findViewById(R.id.nav_host_fragment_activity_main));
+
         setContentView(R.layout.activity_detail);
         DetailFragment fragment = new DetailFragment();
         Intent intent = getIntent();

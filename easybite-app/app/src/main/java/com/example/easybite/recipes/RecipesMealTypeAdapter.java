@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,11 @@ import java.util.Map;
 
 public class RecipesMealTypeAdapter extends RecyclerView.Adapter<RecipesViewHolder> {
     private List<RecipesData> allTheData;
+    private SharedPreferences sharedPreferences;
 
     public RecipesMealTypeAdapter(List<RecipesData> recipesDataList, Activity activity) {
         this.allTheData = recipesDataList;
+        this.sharedPreferences = activity.getSharedPreferences("EASYBITE_APP_PREFS", Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -56,6 +59,69 @@ public class RecipesMealTypeAdapter extends RecyclerView.Adapter<RecipesViewHold
                 Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("recipe_id", dataForThisCell.getRecipeId());
                 context.startActivity(intent);
+            }
+        });
+
+        String recipeId = dataForThisCell.getRecipeId();
+        boolean isFavorite = sharedPreferences.getBoolean(recipeId, false);
+
+        if (isFavorite) {
+            holder.heartButton.setImageResource(R.drawable.full_heart);
+        } else {
+            holder.heartButton.setImageResource(R.drawable.empty_heart);
+        }
+
+        holder.heartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean currentFavorite = sharedPreferences.getBoolean(recipeId, false);
+                boolean newFavorite = !currentFavorite;
+                sharedPreferences.edit().putBoolean(recipeId, newFavorite).apply();
+
+                if (newFavorite) {
+                    holder.heartButton.setImageResource(R.drawable.full_heart);
+                    String recipeId = dataForThisCell.getRecipeId();
+                    RequestQueue queue = Volley.newRequestQueue(v.getContext());
+                    JsonObjectRequestWithAuthentication request = new JsonObjectRequestWithAuthentication(
+                            Request.Method.POST,
+                            "/user/favorites/" + recipeId,
+                            null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(v.getContext(), "Receta agregada a favoritos", Toast.LENGTH_SHORT).show();
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(v.getContext(), "Error al agregar la receta a favoritos", Toast.LENGTH_SHORT).show();
+                                }
+                            },v.getContext()
+                    );
+                    queue.add(request);
+                } else {
+                    holder.heartButton.setImageResource(R.drawable.empty_heart);
+                    RequestQueue queue = Volley.newRequestQueue(v.getContext());
+                    JsonObjectRequestWithAuthentication request = new JsonObjectRequestWithAuthentication(
+                            Request.Method.DELETE,
+                            "/user/favorites/" + recipeId,
+                            null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(v.getContext(), "Receta eliminada de favoritos", Toast.LENGTH_SHORT).show();
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(v.getContext(), "Error al eliminar la receta de favoritos", Toast.LENGTH_SHORT).show();
+                                }
+                            }, v.getContext()
+                    );
+                    queue.add(request);
+                }
             }
         });
 

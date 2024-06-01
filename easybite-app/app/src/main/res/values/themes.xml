@@ -5,5 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.EasyBite" parent="Base.Theme.EasyBite" />
+    <style name="Theme.EasyBite" parent="Base.Theme.EasyBite">
+        <item name="colorPrimaryDark">#696969</item>
+    </style>
 </resources>
