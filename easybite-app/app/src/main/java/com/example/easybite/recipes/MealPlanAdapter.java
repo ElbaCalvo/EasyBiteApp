@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,24 +16,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.easybite.DetailActivity;
 import com.example.easybite.JsonObjectRequestWithAuthentication;
-import com.example.easybite.MealPlanActivity;
 import com.example.easybite.R;
-import com.example.easybite.Server;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.AccessController;
 import java.util.List;
 
 public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanViewHolder> {
     private List<MealPlanData> allTheData;
-    String weekDay;
     private Activity activity;
+    String weekDay;
 
     public MealPlanAdapter(List<MealPlanData> mealPlanDataList, Activity activity) {
         this.allTheData = mealPlanDataList;

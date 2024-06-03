@@ -1,10 +1,6 @@
 package com.example.easybite;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +15,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.example.easybite.recipes.MealPlanAdapter;
 import com.example.easybite.recipes.MealPlanData;
-import com.example.easybite.recipes.RecipesAdapter;
-import com.example.easybite.recipes.RecipesData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

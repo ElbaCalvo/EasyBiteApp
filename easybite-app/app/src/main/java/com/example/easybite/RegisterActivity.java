@@ -6,13 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerButton;
     private RequestQueue requestQueue;
     private final Context context = this;
-    private ProgressBar pb1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         password2EditText = findViewById(R.id.password2);
         emailEditText = findViewById(R.id.email);
         birthdateEditText = findViewById(R.id.birthdate);
-        pb1 = findViewById(R.id.loadingScreen);
+
         birthdateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +84,6 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String birthdate = birthdateEditText.getText().toString();
                 if (validateRegister(username,password,password2, email, birthdate)){
-                    pb1.setVisibility(View.VISIBLE);
                     sendRegisterRequest();
                 }
             }
@@ -133,7 +128,6 @@ public class RegisterActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        pb1.setVisibility(View.GONE);
                         Toast.makeText(context, "Usuario creado", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(context, LoginActivity.class);
                         startActivity(intent);
@@ -144,10 +138,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse == null) {
-                            pb1.setVisibility(View.GONE);
                             Toast.makeText(context, "No se pudo establecer la conexión", Toast.LENGTH_LONG).show();
                         } else {
-                            pb1.setVisibility(View.GONE);
                             int serverCode = error.networkResponse.statusCode;
                             Toast.makeText(context, "Estado de respuesta: " + serverCode, Toast.LENGTH_LONG).show();
                         }

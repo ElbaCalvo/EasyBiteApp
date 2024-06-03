@@ -30,8 +30,8 @@ public class DetailFragment extends Fragment {
 
     private RequestQueue requestQueue;
     private String recipeId;
-    private TextView recipeName, recipeCalories, recipeIngredients, recipeExplanation;
-    private ImageView recipeImage, heartImage, addRecipeImage;
+    private TextView recipeName, recipeIngredients, recipeExplanation;
+    private ImageView recipeImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,9 +63,8 @@ public class DetailFragment extends Fragment {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                String image_link = response.getString("image_link");
+                                String imageLink = response.getString("image_link");
                                 String name = response.getString("name");
-                                System.out.println(name);
                                 String recipe = response.getString("recipe");
                                 JSONArray ingredientsArray = response.getJSONArray("ingredients");
 
@@ -82,7 +81,7 @@ public class DetailFragment extends Fragment {
                                 recipeExplanation.setText(recipe);
 
                                 try {
-                                    Util.downloadBitmapToImageView(image_link, recipeImage);
+                                    Util.downloadBitmapToImageView(imageLink, recipeImage);
                                 } catch (Exception e) {
                                     recipeImage.setImageResource(R.drawable.ic_launcher_background);
                                 }

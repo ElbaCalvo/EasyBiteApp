@@ -9,24 +9,19 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.easybite.DetailActivity;
 import com.example.easybite.JsonObjectRequestWithAuthentication;
 import com.example.easybite.R;
-import com.example.easybite.Server;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesViewHolder> {
+    boolean isFavorite;
     private List<RecipesData> allTheData;
     private SharedPreferences sharedPreferences;
 
@@ -68,7 +64,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesViewHolder> {
         });
 
         String recipeId = dataForThisCell.getRecipeId();
-        boolean isFavorite = sharedPreferences.getBoolean(recipeId, false);
+        isFavorite = dataForThisCell.getIsLiked();
 
         if (isFavorite) {
             holder.heartButton.setImageResource(R.drawable.full_heart);
@@ -79,13 +75,12 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesViewHolder> {
         holder.heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean currentFavorite = sharedPreferences.getBoolean(recipeId, false);
-                boolean newFavorite = !currentFavorite;
-                sharedPreferences.edit().putBoolean(recipeId, newFavorite).apply();
+                isFavorite =dataForThisCell.getIsLiked();
+                dataForThisCell.setIsLiked(!isFavorite);
+                boolean newFavorite = !isFavorite;
 
                 if (newFavorite) {
                     holder.heartButton.setImageResource(R.drawable.full_heart);
-                    String recipeId = dataForThisCell.getRecipeId();
                     RequestQueue queue = Volley.newRequestQueue(v.getContext());
                     JsonObjectRequestWithAuthentication request = new JsonObjectRequestWithAuthentication(
                             Request.Method.POST,

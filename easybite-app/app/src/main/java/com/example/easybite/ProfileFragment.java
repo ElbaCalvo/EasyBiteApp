@@ -24,7 +24,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.easybite.recipes.RecipesAdapter;
 import com.example.easybite.recipes.RecipesData;
@@ -76,7 +75,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 SharedPreferences preferences = context.getSharedPreferences("EASYBITE_APP_PREFS", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
+                editor.remove("user_id");
+                editor.remove("session_id");
                 editor.apply();
 
                 Intent intent = new Intent(context, LoginActivity.class);
@@ -144,7 +144,6 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            System.out.println(response);
                             usernameLabel.setText(response.getString("username"));
                             emailLabel.setText(response.getString("email"));
                             birthdateLabel.setText(response.getString("birthdate"));
@@ -181,10 +180,10 @@ public class ProfileFragment extends Fragment {
                                     JSONArray favorites = response.getJSONArray("favorites");
                                     for(int i=0; i<favorites.length(); i++) {
                                         JSONObject recipes = favorites.getJSONObject(i);
-                                        String image_link = recipes.getString("image_link");
+                                        String imageLink = recipes.getString("image_link");
                                         String name = recipes.getString("name");
                                         String recipe = recipes.getString("recipe");
-                                        recipes.put("image_link", image_link);
+                                        recipes.put("image_link", imageLink);
                                         recipes.put("name", name);
                                         recipes.put("recipe", recipe);
                                         RecipesData data = new RecipesData(recipes);

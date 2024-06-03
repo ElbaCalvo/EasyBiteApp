@@ -1,5 +1,6 @@
 package com.example.easybite;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
+    private Context context;
     private RequestQueue queue;
     private RecyclerView recyclerView;
     private RecipesAdapter adapter;
@@ -48,6 +50,7 @@ public class SearchFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         setHasOptionsMenu(true);
+        context = getContext();
 
         recyclerView = view.findViewById(R.id.recycler_view_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,9 +69,9 @@ public class SearchFragment extends Fragment {
     }
 
     private void getRecipesByIngredient(String ingredient) {
-        JsonArrayRequest request = new JsonArrayRequest(
+        JsonArrayRequestWithAuthentication request = new JsonArrayRequestWithAuthentication(
                 Request.Method.GET,
-                Server.name + "/recipes/ingredient/" + ingredient,
+                "/recipes/ingredient/" + ingredient,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -76,12 +79,14 @@ public class SearchFragment extends Fragment {
                         for(int i=0; i<response.length(); i++) {
                             try {
                                 JSONObject recipes = response.getJSONObject(i);
-                                String image_link = recipes.getString("image_link");
+                                String imageLink = recipes.getString("image_link");
                                 String name = recipes.getString("name");
                                 String recipe = recipes.getString("recipe");
-                                recipes.put("image_link", image_link);
+                                Boolean isLiked = recipes.getBoolean("is_liked");
+                                recipes.put("image_link", imageLink);
                                 recipes.put("name", name);
                                 recipes.put("recipe", recipe);
+                                recipes.put("is_liked", isLiked);
                                 RecipesData data = new RecipesData(recipes);
                                 recipesList.add(data);
                             } catch (JSONException e) {
@@ -96,7 +101,7 @@ public class SearchFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                }
+                }, context
         );
         queue.add(request);
     }

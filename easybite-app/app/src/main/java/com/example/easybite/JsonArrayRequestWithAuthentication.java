@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonArrayRequestWithAuthentication extends JsonArrayRequest {
-
-    // Añade el token a header en la petición
-
     private Context context;
     private String url;
 

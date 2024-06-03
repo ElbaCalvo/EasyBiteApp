@@ -168,8 +168,33 @@ def get_user_favorites(request):
             user_session = authenticate_user(request)
             user = User.objects.get(id=user_session.user.id)
             favorites = UserFavorites.objects.filter(user=user)
-            favorites_json = [favorite.recipe.to_json() for favorite in favorites]
-            return JsonResponse({'favorites': favorites_json}, status=200)
+
+            ingredients = Recipes.objects.filter()
+
+            json_response = []
+
+            for recipe in favorites:
+                recipe_info = Recipes.objects.get(id=recipe.recipe.id)
+                user_liked = True
+
+                ingredients_info = []
+                for ingredient in recipe_info.ingredients.all():
+                    ingredients_info.append({ 
+                        "name": ingredient.name,
+                        "kcal": ingredient.kcal
+                    })
+
+                json_response.append({
+                    "id": recipe_info.id,
+                    "image_link": recipe_info.image_link,
+                    "name": recipe_info.name,
+                    "recipe": recipe_info.recipe,
+                    "food_type": recipe_info.food_type,
+                    "is_liked": user_liked,
+                    "ingredients": ingredients_info,
+
+                })
+            return JsonResponse({'favorites': json_response}, safe=False, status=200)
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
         except User.DoesNotExist:
@@ -187,6 +212,7 @@ def user_favorite(request, recipe_id):
                 return JsonResponse({'response': 'already_exists'}, status=400)
             recipe = Recipes.objects.get(id=recipe_id)
             new_favorite = UserFavorites.objects.create(user=user, recipe=recipe)
+            
             return JsonResponse({'response': 'ok'}, status=201)
         except PermissionDenied:
             return JsonResponse({'response': 'unauthorized'}, status=401)
@@ -270,18 +296,50 @@ def user_mealplan(request, day, recipe_id):
 @csrf_exempt
 def recipes(request):
     if request.method == 'GET':
-        food_type = request.GET.get('food_type')
-        ingredient = request.GET.get('ingredient')
+        try:
+            user_session = authenticate_user(request)
+        except PermissionDenied:
+            return JsonResponse({'error': 'unauthorized'}, status=401)
+
+        food_type = request.GET.get('food_type', None)
+        ingredient = request.GET.get('ingredient', None)
 
         recipes_queryset = Recipes.objects.all()
+        ingredients = Recipes.objects.filter()
 
-        if food_type:
-            recipes_queryset = recipes_queryset.filter(food_type=food_type)
-        if ingredient:
+        if food_type is not None:
+            recipes_queryset = Recipes.objects.filter(food_type=food_type)
+            print(recipes_queryset)
+        if ingredient is not None:
             recipes_queryset = recipes_queryset.filter(ingredients__name=ingredient)
 
-        recipes_data = [recipe.to_json() for recipe in recipes_queryset]
-        return JsonResponse(recipes_data, safe=False)
+        json_response = []
+
+        for recipe in recipes_queryset:
+            try:
+                recipe_liked = UserFavorites.objects.get(user=user_session.user, recipe=recipe)
+                user_liked = True
+            except UserFavorites.DoesNotExist:
+                user_liked = False
+
+            ingredients_info = []
+            for ingredient in recipe.ingredients.all():
+                ingredients_info.append({ 
+                    "name": ingredient.name,
+                    "kcal": ingredient.kcal
+                })
+
+            json_response.append({
+                "id": recipe.id,
+                "image_link": recipe.image_link,
+                "name": recipe.name,
+                "recipe": recipe.recipe,
+                "food_type": recipe.food_type,
+                "is_liked": user_liked,
+                "ingredients": ingredients_info,
+
+            })
+        return JsonResponse(json_response, safe=False, status=200)
     else:
         return JsonResponse({"response": "not_ok"}, status=405)
 
@@ -315,8 +373,43 @@ def ingredients(request):
 
 def recipes_by_ingredient(request, ingredient):
     if request.method == 'GET':
+        try:
+            user_session = authenticate_user(request)
+        except PermissionDenied:
+            return JsonResponse({'error': 'unauthorized'}, status=401)
+        
         recipes_queryset = Recipes.objects.filter(ingredients__name=ingredient)
-        recipes_data = [recipe.to_json() for recipe in recipes_queryset]
-        return JsonResponse(recipes_data, safe=False)
+        ingredients = Recipes.objects.filter()
+
+        if ingredient:
+            recipes_queryset = recipes_queryset.filter(ingredients__name=ingredient)
+
+        json_response = []
+
+        for recipe in recipes_queryset:
+            try:
+                recipe_liked = UserFavorites.objects.get(user=user_session.user, recipe=recipe)
+                user_liked = True
+            except UserFavorites.DoesNotExist:
+                user_liked = False
+
+            ingredients_info = []
+            for ingredient in recipe.ingredients.all():
+                ingredients_info.append({ 
+                    "name": ingredient.name,
+                    "kcal": ingredient.kcal
+                })
+
+            json_response.append({
+                "id": recipe.id,
+                "image_link": recipe.image_link,
+                "name": recipe.name,
+                "recipe": recipe.recipe,
+                "food_type": recipe.food_type,
+                "is_liked": user_liked,
+                "ingredients": ingredients_info,
+
+            })
+        return JsonResponse(json_response, safe=False, status=200)
     else:
         return JsonResponse({"response": "not_ok"}, status=405)

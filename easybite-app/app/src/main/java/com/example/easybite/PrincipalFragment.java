@@ -1,6 +1,7 @@
 package com.example.easybite;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import android.widget.SimpleCursorAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrincipalFragment extends Fragment {
+    private Context context;
     private RequestQueue queue;
     private RecyclerView recyclerView;
     private RecipesAdapter adapter;
@@ -91,6 +92,12 @@ public class PrincipalFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadRecipes();
+    }
+
     private void showSuggestions(String query) {
         String[] columns = new String[]{BaseColumns._ID, "ingredient"};
         Object[] temp = new Object[]{0, "default"};
@@ -140,6 +147,7 @@ public class PrincipalFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
+        context = getContext();
         ImageView desayunoImageView = view.findViewById(R.id.image_view_desayunos);
         ImageView comidaImageView = view.findViewById(R.id.image_view_comidas);
         ImageView snacksImageView = view.findViewById(R.id.image_view_snacks);
@@ -173,32 +181,38 @@ public class PrincipalFragment extends Fragment {
             }
         });
 
+        reloadRecipes();
+    }
 
+    private void reloadRecipes() {
         RequestQueue queue = Volley.newRequestQueue(getContext());
 
-        JsonArrayRequest request = new JsonArrayRequest
+        JsonArrayRequestWithAuthentication request = new JsonArrayRequestWithAuthentication
                 (Request.Method.GET,
-                        Server.name + "/recipes",
+                        "/recipes",
                         null,
                         new Response.Listener<JSONArray>(){
                             @Override
                             public void onResponse(JSONArray response) {
-                                for(int i=0; i<response.length(); i++) {
-                                    try {
+                                try {
+                                    for(int i=0; i<response.length(); i++) {
                                         JSONObject recipes = response.getJSONObject(i);
-                                        String image_link = recipes.getString("image_link");
+                                        String imageLink = recipes.getString("image_link");
                                         String name = recipes.getString("name");
                                         String recipe = recipes.getString("recipe");
-                                        recipes.put("image_link", image_link);
+                                        String isLiked = recipes.getString("is_liked");
+                                        recipes.put("image_link", imageLink);
                                         recipes.put("name", name);
                                         recipes.put("recipe", recipe);
+                                        recipes.put("is_liked", isLiked);
                                         RecipesData data = new RecipesData(recipes);
                                         RecipesDataList.add(data);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
                                     }
+                                    adapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                adapter.notifyDataSetChanged();
+                                ;adapter.notifyDataSetChanged();
                             }
                         }, new Response.ErrorListener() {
 
@@ -206,7 +220,8 @@ public class PrincipalFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
                     }
-                });
+                },context
+                );
         queue.add(request);
     }
 

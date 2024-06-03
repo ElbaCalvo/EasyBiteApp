@@ -12,18 +12,15 @@
         android:layout_height="match_parent"
         tools:context=".PrincipalFragment">
 
-        <!-- AppBarLayout contiene la barra de búsqueda -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <!-- Contenedor de la barra de búsqueda -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
 
-                <!-- Search Bar -->
                 <AutoCompleteTextView
                     android:id="@+id/search_view"
                     android:layout_width="0dp"
@@ -42,7 +39,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- NestedScrollView contiene el contenido desplazable -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -54,7 +50,6 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Section Title -->
                 <TextView
                     android:id="@+id/text1"
                     android:layout_width="wrap_content"
@@ -73,7 +68,6 @@
                     android:layout_marginTop="15dp"
                     android:gravity="center">
 
-                    <!-- Button 1: Desayunos -->
                     <LinearLayout
                         android:id="@+id/desayunos"
                         android:layout_width="85dp"
@@ -102,7 +96,6 @@
                             android:gravity="center" />
                     </LinearLayout>
 
-                    <!-- Button 2: Comidas -->
                     <LinearLayout
                         android:id="@+id/comidas"
                         android:layout_width="85dp"
@@ -131,7 +124,6 @@
                             android:gravity="center" />
                     </LinearLayout>
 
-                    <!-- Button 3: Snacks -->
                     <LinearLayout
                         android:id="@+id/snacks"
                         android:layout_width="85dp"
@@ -159,7 +151,6 @@
                             android:gravity="center" />
                     </LinearLayout>
 
-                    <!-- Button 4: Postres -->
                     <LinearLayout
                         android:id="@+id/postres"
                         android:layout_width="85dp"
@@ -189,7 +180,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- All Recipes Title -->
                 <TextView
                     android:id="@+id/text2"
                     android:layout_width="wrap_content"

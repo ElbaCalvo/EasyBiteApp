@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RecipesMealTypeAdapter extends RecyclerView.Adapter<RecipesViewHolder> {
+    boolean isFavorite;
     private List<RecipesData> allTheData;
     private SharedPreferences sharedPreferences;
 
@@ -63,7 +64,7 @@ public class RecipesMealTypeAdapter extends RecyclerView.Adapter<RecipesViewHold
         });
 
         String recipeId = dataForThisCell.getRecipeId();
-        boolean isFavorite = sharedPreferences.getBoolean(recipeId, false);
+        isFavorite = dataForThisCell.getIsLiked();
 
         if (isFavorite) {
             holder.heartButton.setImageResource(R.drawable.full_heart);
@@ -74,13 +75,12 @@ public class RecipesMealTypeAdapter extends RecyclerView.Adapter<RecipesViewHold
         holder.heartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean currentFavorite = sharedPreferences.getBoolean(recipeId, false);
-                boolean newFavorite = !currentFavorite;
-                sharedPreferences.edit().putBoolean(recipeId, newFavorite).apply();
+                isFavorite =dataForThisCell.getIsLiked();
+                dataForThisCell.setIsLiked(!isFavorite);
+                boolean newFavorite = !isFavorite;
 
                 if (newFavorite) {
                     holder.heartButton.setImageResource(R.drawable.full_heart);
-                    String recipeId = dataForThisCell.getRecipeId();
                     RequestQueue queue = Volley.newRequestQueue(v.getContext());
                     JsonObjectRequestWithAuthentication request = new JsonObjectRequestWithAuthentication(
                             Request.Method.POST,

@@ -62,7 +62,6 @@
             app:layout_constraintStart_toStartOf="@+id/recipe_name"
             app:layout_constraintTop_toBottomOf="@+id/recipe_name" />
 
-        <!-- Add heart ImageButton -->
         <ImageView
             android:id="@+id/add"
             android:layout_width="32dp"

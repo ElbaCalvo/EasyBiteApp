@@ -1,6 +1,7 @@
 package com.example.easybite;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,19 +35,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MealTypeFragment extends Fragment {
+    private Context context;
     private RequestQueue requestQueue;
     private String recipeId, recipeMealType;
     private RecipesMealTypeAdapter adapter;
     private List<RecipesData> RecipesDataList;
     private RecyclerView recyclerView;
-    private TextView recipeName, recipeExplanation, titleTextView, descriptionTextView ;
-    private ImageView recipeImage, heartImage, addRecipeImage;
+    private TextView titleTextView, descriptionTextView ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meal_type, container, false);
 
+        context = getContext();
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,23 +96,25 @@ public class MealTypeFragment extends Fragment {
 
         if (bundle != null) {
             this.requestQueue = Volley.newRequestQueue(getContext());
-            JsonArrayRequest request = new JsonArrayRequest(
+            JsonArrayRequestWithAuthentication request = new JsonArrayRequestWithAuthentication(
                     Request.Method.GET,
-                    Server.name + "/recipes?food_type=" + this.recipeMealType,
+                    "/recipes?food_type=" + this.recipeMealType,
                     null,
                     new Response.Listener<JSONArray>() {
                         @Override
                         public void onResponse(JSONArray response) {
                             for (int i = 0; i < response.length(); i++) {
-                                System.out.println(response);
                                 try {
                                     JSONObject recipes = response.getJSONObject(i);
-                                    String image_link = recipes.getString("image_link");
+                                    System.out.println(recipes);
+                                    String imageLink = recipes.getString("image_link");
                                     String name = recipes.getString("name");
                                     String recipe = recipes.getString("recipe");
-                                    recipes.put("image_link", image_link);
+                                    boolean is_liked = recipes.getBoolean("is_liked");
+                                    recipes.put("image_link", imageLink);
                                     recipes.put("name", name);
                                     recipes.put("recipe", recipe);
+                                    recipes.put("is_liked", is_liked);
                                     RecipesData data = new RecipesData(recipes);
                                     RecipesDataList.add(data);
                                 } catch (JSONException e) {
@@ -132,7 +135,7 @@ public class MealTypeFragment extends Fragment {
                             }
                             error.printStackTrace();
                         }
-                    }
+                    }, context
             );
             this.requestQueue.add(request);
         }

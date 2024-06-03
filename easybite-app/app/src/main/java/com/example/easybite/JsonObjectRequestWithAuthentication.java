@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonObjectRequestWithAuthentication extends JsonObjectRequest {
-    // Añade el token a headers en la petición
     private Context context;
     private String url;
 

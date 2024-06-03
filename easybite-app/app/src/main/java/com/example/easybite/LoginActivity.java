@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView registerRedirect;
     private Context context = this;
     private RequestQueue requestQueue;
-    private ProgressBar pb1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.passwd);
         accessButton = findViewById(R.id.access);
         registerRedirect = findViewById(R.id.register_redirect);
-        pb1 = findViewById(R.id.loadingScreen);
         requestQueue = Volley.newRequestQueue(this);
 
         accessButton.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
                 String email = userEmail.getText().toString();
                 String password = userPassword.getText().toString();
                 if (validateLogin(email)) {
-                    pb1.setVisibility(View.VISIBLE);
                     loginUser(email, password);
                 }
             }
@@ -102,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("VALID_EMAIL", email);
                         editor.putString("VALID_TOKEN", receivedToken);
                         editor.commit();
-                        pb1.setVisibility(View.GONE); // Alternamos entre la visibilidad de la barra de progresión a nuestra conveniencia.
                         finish();
                     }
                 },
@@ -110,10 +105,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if (error.networkResponse == null) {
-                            pb1.setVisibility(View.GONE);
                             Toast.makeText(context, "La conexión no se ha establecido", Toast.LENGTH_LONG).show();
                         } else {
-                            pb1.setVisibility(View.GONE);
                             int serverCode = error.networkResponse.statusCode;
                             Toast.makeText(context, "Estado de respuesta " + serverCode, Toast.LENGTH_LONG).show();
                         }

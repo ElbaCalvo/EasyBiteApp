@@ -25,17 +25,12 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private TextView usernameText;
-    private TextView emailText;
-    private TextView birthdateText;
-    private RequestQueue requestQueue;
     private EditText email;
     private EditText username;
     private EditText password;
     private EditText password2;
     private EditText birthdate;
     private Button saveButton;
-    private String sessionToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

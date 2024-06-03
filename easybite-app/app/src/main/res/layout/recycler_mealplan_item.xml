@@ -64,6 +64,7 @@
                 android:layout_marginTop="22dp"
                 android:backgroundTint="#696969"
                 app:layout_constraintTop_toTopOf="@+id/recipe_name"
+                app:layout_constraintBottom_toBottomOf="@+id/recipe_name"
                 app:layout_constraintEnd_toEndOf="@+id/layout"/>
         </LinearLayout>
     </LinearLayout>
