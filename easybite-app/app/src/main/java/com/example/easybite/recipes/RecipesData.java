@@ -4,35 +4,35 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RecipesData {
-    private String recipe_id;
-    private String image_link;
-    private String recipe_name;
+    private String recipeId;
+    private String imageLink;
+    private String recipeName;
     private String recipe;
-    private boolean is_liked;
+    private boolean isLiked;
 
     public RecipesData(JSONObject jsonObject) throws JSONException {
-        this.recipe_id = jsonObject.getString("id");
-        this.image_link = jsonObject.getString("image_link");
-        this.recipe_name = jsonObject.getString("name");
+        this.recipeId = jsonObject.getString("id");
+        this.imageLink = jsonObject.getString("image_link");
+        this.recipeName = jsonObject.getString("name");
         this.recipe = jsonObject.getString("recipe");
-        this.is_liked = jsonObject.getBoolean("is_liked");
+        this.isLiked = jsonObject.getBoolean("is_liked");
     }
 
     public String getRecipeId(){
-        return recipe_id;
+        return recipeId;
     }
-    public String getImage_link() {
-        return image_link;
+    public String getImageLink() {
+        return imageLink;
     }
-    public String getRecipeName() { return recipe_name; }
+    public String getRecipeName() { return recipeName; }
     public String getRecipe() {
         return recipe;
     }
     public boolean getIsLiked() {
-        return is_liked;
+        return isLiked;
     }
     public void setIsLiked(boolean is_liked){
-        this.is_liked = is_liked;
+        this.isLiked = is_liked;
     }
 
 }

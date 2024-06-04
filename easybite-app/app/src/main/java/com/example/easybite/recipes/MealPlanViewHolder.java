@@ -26,7 +26,7 @@ class MealPlanViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void showData(MealPlanData data) {
-        Util.downloadBitmapToImageView(data.getImage_link(), imageViewFood);
+        Util.downloadBitmapToImageView(data.getImageLink(), imageViewFood);
         textViewRecipeName.setText(data.getRecipeName());
     }
 

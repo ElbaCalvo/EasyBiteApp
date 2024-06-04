@@ -27,7 +27,7 @@ class RecipesViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void showData(RecipesData data) {
-        Util.downloadBitmapToImageView(data.getImage_link(), imageViewFood);
+        Util.downloadBitmapToImageView(data.getImageLink(), imageViewFood);
         textViewRecipeName.setText(data.getRecipeName());
         textViewRecipe.setText(data.getRecipe());
     }

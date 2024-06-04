@@ -4,26 +4,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MealPlanData {
-    private String mealplan_id;
-    private String recipe_id;
-    private String image_link;
-    private String recipe_name;
+    private String mealplanId;
+    private String recipeId;
+    private String imageLink;
+    private String recipeName;
 
     public MealPlanData(JSONObject jsonObject) throws JSONException {
-        this.mealplan_id = jsonObject.getString("mealplan_id");
-        this.recipe_id = jsonObject.getString("id");
-        this.image_link = jsonObject.getString("image_link");
-        this.recipe_name = jsonObject.getString("name");
+        this.mealplanId = jsonObject.getString("mealplan_id");
+        this.recipeId = jsonObject.getString("id");
+        this.imageLink = jsonObject.getString("image_link");
+        this.recipeName = jsonObject.getString("name");
     }
 
     public String getMealPlanId(){
-        return mealplan_id;
+        return mealplanId;
     }
     public String getRecipeId(){
-        return recipe_id;
+        return recipeId;
     }
-    public String getImage_link() {
-        return image_link;
+    public String getImageLink() {
+        return imageLink;
     }
-    public String getRecipeName() { return recipe_name; }
+    public String getRecipeName() { return recipeName; }
 }
