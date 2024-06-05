@@ -92,12 +92,6 @@ public class PrincipalFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        reloadRecipes();
-    }
-
     private void showSuggestions(String query) {
         String[] columns = new String[]{BaseColumns._ID, "ingredient"};
         Object[] temp = new Object[]{0, "default"};
