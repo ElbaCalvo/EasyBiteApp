@@ -37,7 +37,7 @@ EasyBite es una aplicación diseñada pensando en estudiantes que desean prepara
   
 ## Estado del Proyecto
 
-El proyecto está en desarrollo activo y se encuentra en fase beta.
+El proyecto está terminado.
 
 ## Características de la aplicación y demostración
 
