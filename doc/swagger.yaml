@@ -10,6 +10,8 @@ tags: # Tags to group different types of actions
     description: User actions
   - name: Recipes
     description: Recipes info/actions
+  - name: Ingredients
+    description: Ingredients info/actions
 paths: # API paths along with their operations
   /user/session: # POST request to create a new session
     post: # POST request to log in a user
@@ -151,11 +153,18 @@ paths: # API paths along with their operations
           $ref: '#/components/responses/Unauthorized'
         500:
           $ref: '#/components/responses/ServerError'
-    post: # POST request to add a recipe to user's favorites
+  /user/favorites/{recipeID}:
+    post:
       tags:
         - User
       summary: Adds a recipe to the user's favorites list
       parameters:
+        - name: recipeID
+          in: path
+          required: true
+          description: ID of the recipe to delete from favorites
+          schema:
+            type: string
         - name: SessionToken
           schema:
             type: string
@@ -165,15 +174,17 @@ paths: # API paths along with their operations
       security:
         - bearerAuth: []
       responses:
-        201:
-          $ref: '#/components/responses/SuccessfulOperation'
-        400:
-          $ref: '#/components/responses/ClientError'
+        200:
+          description: User favorite added.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/UserFavorites'
+                # If there are no favorites, return an empty array.
         401:
           $ref: '#/components/responses/Unauthorized'
         500:
           $ref: '#/components/responses/ServerError'
-  /user/favorites/{recipeID}: # User favorites recipes operations
     delete: # DELETE request to delete a recipe from user's favorites
       tags:
         - User
@@ -234,12 +245,19 @@ paths: # API paths along with their operations
           $ref: '#/components/responses/Unauthorized'
         500:
           $ref: '#/components/responses/ServerError'
+  /user/mealplan/{day}/{recipeID}:
     post: # POST request to add a recipe to user's meal plan for a specific day
       tags:
         - User
       summary: Adds a recipe to the user's meal plan for a specific day
       parameters:
         - name: day
+          in: path
+          required: true
+          description: Day of the meal plan to add a recipe to
+          schema:
+            type: string
+        - name: recipeID
           in: path
           required: true
           description: Day of the meal plan to add a recipe to
@@ -273,6 +291,12 @@ paths: # API paths along with their operations
           description: Day of the meal plan to delete a recipe from
           schema:
             type: string
+        - name: recipeID
+          in: path
+          required: true
+          description: Day of the meal plan to add a recipe to
+          schema:
+            type: string
         - name: SessionToken
           schema:
             type: string
@@ -288,6 +312,20 @@ paths: # API paths along with their operations
           $ref: '#/components/responses/ClientError'
         401:
           $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/ServerError'
+  /recipes: # Recipes operations
+    get: # GET request to get all recipes
+      tags:
+        - Recipes
+      summary: Retrieves all recipes
+      responses:
+        200:
+          description: Recipes received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/Recipes'
         500:
           $ref: '#/components/responses/ServerError'
   /recipes/{recipeID}: # Recipes operations
@@ -311,29 +349,32 @@ paths: # API paths along with their operations
                 $ref: '#/components/schemas/Recipes'
         500:
           $ref: '#/components/responses/ServerError'
-    delete: # DELETE request to delete a recipe
+  /ingredients: # Ingredients operations
+    get: # GET request to get all ingredients
       tags:
-        - Recipes
-      summary: Deletes a recipe by ID
-      parameters:
-        - name: recipeID
-          in: path
-          required: true
-          description: ID of the recipe.
-          schema:
-            type: string
+        - Ingredients
+      summary: Retrieves all ingredients
       responses:
-        201:
-          $ref: '#/components/responses/SuccessfulOperation'
-        400:
-          $ref: '#/components/responses/ClientError'
+        200:
+          description: Ingredients received.
+          content:
+            application/json:    
+              schema:
+                $ref: '#/components/schemas/Ingredient'
         500:
           $ref: '#/components/responses/ServerError'
-  /recipes: # Recipes operations
-    get: # GET request to get all recipes
+  /recipes/ingredient/{ingredient}: # Ingredients operations
+    get: # GET request to get all ingredients
       tags:
         - Recipes
-      summary: Retrieves all recipes
+      summary: Retrieves all recipes with a specific ingredient
+      parameters:
+        - name: ingredient
+          in: path
+          required: true
+          description: Name of the ingredient to retrieve recipes with.
+          schema:
+            type: string
       responses:
         200:
           description: Recipes received.
@@ -341,22 +382,6 @@ paths: # API paths along with their operations
             application/json:    
               schema:
                 $ref: '#/components/schemas/Recipes'
-        500:
-          $ref: '#/components/responses/ServerError'
-    post: # POST request to create a new recipe
-      tags:
-        - Recipes
-      summary: Creates a new recipe
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PostRecipes'
-      responses:
-        201:
-          $ref: '#/components/responses/SuccessfulOperation'
-        400:
-          $ref: '#/components/responses/ClientError'
         500:
           $ref: '#/components/responses/ServerError'
 components: # Components used in the API
