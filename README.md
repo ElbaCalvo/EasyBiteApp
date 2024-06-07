@@ -58,7 +58,7 @@ EasyBite está como repositorio público en github.
 
 ## :hammer_and_wrench:Abre y ejecuta el proyecto
 
-Para ejecutar el proyecto localmente, sigue estos pasos:
+Para ejecutar el proyecto, sigue estos pasos:
 
     - Clona el repositorio desde GitHub: git clone https://github.com/ElbaCalvo/EasyBiteApp.git
     - Instala las dependencias del proyecto: npm install
