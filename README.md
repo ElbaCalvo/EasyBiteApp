@@ -62,8 +62,15 @@ Para ejecutar el proyecto localmente, sigue estos pasos:
 
     - Clona el repositorio desde GitHub: git clone https://github.com/ElbaCalvo/EasyBiteApp.git
     - Instala las dependencias del proyecto: npm install
-    - Inicia el servidor local: npm start
-    - Abre tu navegador y ve a http://localhost:8000 para ver la aplicación en funcionamiento.
+    - Inicia el servidor
+    - Abre Android Studio y ejecuta el programa.
+
+<br>   
+
+> **<span style="color:orange;">Advertencia</span>**
+>
+> Se ha utilizado el dispositivo **PIXEL XL** y el **API 28** para desarrollar esta aplicación. Para el correcto funcionamiento y visualización de la aplicación es recomendable usar el mismo dispositivo y API.
+
 
 ## :white_check_mark:Tecnologías utilizadas
 
