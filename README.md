@@ -1,6 +1,6 @@
 <h1 align="center"> EasyBiteApp </h1>
 
-![EasyBite-Github](https://raw.githubusercontent.com/ElbaCalvo/EasyBiteApp/main/doc/logo/EasyBite_GitHub.png?token=GHSAT0AAAAAACQC663Z6B7IEECEX323JLM2ZRTLHHQ)
+![EasyBite-Github](https://raw.githubusercontent.com/ElbaCalvo/EasyBiteApp/refs/heads/main/doc/logo/EasyBite_GitHub.png)
 
 <p align="center">
   <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-087830">
